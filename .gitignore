@@ -1,0 +1,19 @@
+# Exclude all hidden files
+.*
+# all temp. vi files
+*~
+
+# all temp. emacs files
+*\#
+
+# Except those related to git and vagrant
+!.git*
+
+# Exclude build directory
+build/*
+
+# Exclude tmp
+tmp/*
+
+
+
