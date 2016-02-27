@@ -18,14 +18,14 @@ check-env:
 	@echo "End check-env"
 
 smilint-check:
-	@echo "Start smilint-check"
+	@echo "Start smilint-check, noout means no errors"
 	@smilint  -l 3 ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt
-	@echo "End smilint-check"
+	@echo "End smilint-check, if no output, no errors"
 
 smilint-check-strong:
-	@echo "Start smilint-check-strong"
+	@echo "Start smilint-check-strong, noout means no errors"
 	@smilint -l 6 ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt
-	@echo "End smilint-check-strong"
+	@echo "End smilint-check-strong, if no output, no errors"
 
 smidump-create:
 	@echo "Start smidump-create"
