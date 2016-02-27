@@ -1,0 +1,199 @@
+--
+-- Author: Uwe Ebel ( kobmaki @ aol . com )
+-- Infos: Definition of the ICINGA2-MIB below koboldmaki root mib (1.3.6.1.4.1.12483) 
+--
+
+KOBOLDMAKI-ICINGA2-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY FROM SNMPv2-SMI
+    OBJECT-IDENTITY FROM SNMPv2-SMI
+    OBJECT-TYPE	FROM SNMPv2-SMI
+--    enterprises FROM SNMPv2-SMI
+    NOTIFICATION-TYPE FROM SNMPv2-SMI
+    NOTIFICATION-GROUP FROM SNMPv2-CONF
+    MODULE-COMPLIANCE FROM SNMPv2-CONF
+    OBJECT-GROUP FROM SNMPv2-CONF
+    koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB;
+        
+icinga2  MODULE-IDENTITY
+	    -- snmptranslate 1.3.6.1.4.1.12483.999.2 
+	    LAST-UPDATED "201512250001Z"
+	    ORGANIZATION "Uwe Ebel, koboldmaki"
+	    CONTACT-INFO "Uwe Ebel"
+
+	    DESCRIPTION "ICINGA2 MIB, see also at REVISION=LAST-UPDATED"
+	    
+	    REVISION "201512250001Z"
+	    DESCRIPTION "initial version"
+
+	    -- snmptranslate enterprises 12483 
+	    ::= { koboldmaki-oss 2 }
+
+
+icinga2Compliance OBJECT-IDENTITY
+             STATUS current
+	     DESCRIPTION "Compliance"
+	     ::= { icinga2 6 }
+	     
+icinga2Conformance OBJECT-IDENTITY
+             STATUS current
+	     DESCRIPTION "Conformance"
+	     ::= { icinga2 5 }
+	     
+icinga2Groups OBJECT-IDENTITY
+             STATUS current
+	     DESCRIPTION "Groups"
+	     ::= { icinga2 4 }
+	     
+icinga2Traps OBJECT-IDENTITY
+	     STATUS  current
+	     DESCRIPTION "Trap type definitions"
+	    ::= { icinga2 3 }
+
+icinga2Notifications OBJECT-IDENTITY
+            STATUS current
+	    DESCRIPTION "Parent of all notifications like traps, informations etc."
+            ::= { icinga2 2 }
+
+icinga2Type OBJECT-IDENTITY
+	    STATUS current
+	    DESCRIPTION "All icinga type definitions like host, service, etc."
+            ::= {  icinga2 1 }
+	    
+
+i2ObjectType OBJECT-TYPE
+	    SYNTAX INTEGER {
+	    host (1),
+	    service (2),
+	    hostgroup (3),
+	    servicegroup (4),
+	    hostescalation (5),
+	    serviceescalation (6),
+	    hostdependency (7),
+	    servicedependency (8),
+	    timeperiod (9),
+	    contact (10),
+	    contactgroup (11),
+	    command (12),
+	    endpoint (13),
+	    zone (14)
+	    }
+	    STATUS current
+	    DESCRIPTION "Objecttype, id mapping type"
+	    -- https://github.com/Icinga/icinga2/blob/master/lib/db_ido/dbobject.hpp
+	    ::= { icinga2Type 1}
+	    
+i2StateType OBJECT-TYPE
+            SYNTAX INTEGER {
+                   stateTypeSoft (0),
+                   stateTypeHard (1)
+            }
+	    STATUS current
+	    DESCRIPTION "State type"
+	    -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti
+	    ::= { icinga2Type 3 }
+
+i2StateHost OBJECT-TYPE
+             SYNTAX INTEGER {
+                    hostUp (0),
+                    hostDown (1)
+                    }
+	     STATUS current
+	     DESCRIPTION "Host state"
+	     -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti"
+	     ::= { icinga2Type 4 }
+
+i2StateService OBJECT-TYPE
+             SYNTAX INTEGER {
+                   serviceOK (0),
+                   serviceWarning (1),
+                   serviceCritical (2),
+                   serviceUnknown (3)
+                   -- servicePending (4)
+            }
+	    STATUS current
+	    DESCRIPTION "Service state"
+	    -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti
+	    ::= { icinga2Type 5 }
+
+i2NotificationType OBJECT-TYPE
+           SYNTAX INTEGER {
+	   	  DowntimeStart(0),
+		  DowntimeEnd(1),
+		  DowntimeRemoved(2),
+		  Custom(3),
+		  Acknowledgement(4),
+		  Problem(5),
+		  Recovery(6),
+		  FlappingStart(7),
+		  FlappingEnd(8)
+	   }
+	   STATUS current
+	   DESCRIPTION "Notfication type"
+	   -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
+	   :: { icinga2Type 6 }
+	   
+I2Host ::= SEQUENCE {
+       i2StateHost INTEGER
+         }
+
+--
+--
+--
+i2NotificationHost NOTIFICATION-TYPE
+	   OBJECTS {
+	   i2StateHost
+	   }
+	   STATUS current
+	   DESCRIPTION "Host trap"
+	   ::= { icinga2Notifications 1 }
+
+i2NotificationService NOTIFICATION-TYPE
+	   OBJECTS {
+	   i2StateService
+	   }
+	   STATUS current
+	   DESCRIPTION "Service trap"
+	   ::= { icinga2Notifications 2 }
+
+i2ComplianceTypeGroup OBJECT-GROUP
+           OBJECTS {
+	   i2ObjectType, i2StateType
+	   }
+	   STATUS current
+	   DESCRIPTION "Group for compliance"
+           ::= { icinga2Groups 1 }
+
+i2ComplianceStateGroup  OBJECT-GROUP
+	   OBJECTS {
+	   i2StateService, i2StateHost
+	   }
+	   STATUS current
+	   DESCRIPTION "Group with state objects for compliance"
+	   ::= { icinga2Groups 2 }
+	   
+i2ComplianceNotificationGroup NOTIFICATION-GROUP
+           NOTIFICATIONS {
+	   i2NotificationHost, i2NotificationService
+	   }
+	   STATUS current
+	   DESCRIPTION "Trap group for compliance"
+	   ::= { icinga2Groups 3 }
+	   
+i2Compliance MODULE-COMPLIANCE
+	     STATUS current
+	     DESCRIPTION "A DES"
+	     MODULE
+	     
+	     GROUP i2ComplianceTypeGroup
+	     DESCRIPTION "Objects"
+
+	     GROUP i2ComplianceStateGroup
+	     DESCRIPTION "Object Type"
+
+	     GROUP i2ComplianceNotificationGroup
+	     DESCRIPTION "Traps"
+	     ::= { icinga2Compliance 1 }
+END
+
