@@ -1,3 +1,54 @@
 #!/bin/bash
-# TBD.
-echo "kobmon-icinga2mib TBD"
+# Author: Uwe Ebel
+# Version: 0.1
+# Info: icinga2mib helper
+#
+
+PROVIDES=${PROVIDES-$(basename $0)}
+function krc_status ()
+{
+    _krc_status_ret=$?
+    case ${_krc_status_ret} in
+    0) echo -n  "$(tput setaf 2 2>/dev/null)$1$(tput sgr0 2>/dev/null)"
+            [[ -z $1 ]] ||  echo
+    ;;
+    1) echo -n  "$(tput setaf 1 2>/dev/null)$2$(tput sgr0 2>/dev/null)"
+            [[  -z $2 ]] || echo
+       ;;
+    *)
+            echo "UNKNOWN $_krc_status_ret "$3
+      ;;
+   esac
+    return $_krc_status_ret
+}
+
+#
+# show the value of a variable
+#
+function kob_show (){
+    echo -ne ${1}": "
+    krc_status ${!1}
+    test -z ${!1} && echo
+}
+
+
+case $1 in
+check-env)
+	echo -n "Check ${PROVIDES}... "
+	krc_status "starting" ""
+
+	echo -n "Program smilint: "
+	aSMILINT=$(which smilint 2>/dev/null)
+	krc_status "OK ${aSMILINT}" "Error smilinit missing"
+
+	echo -n "Program snmptranslate: "
+	aSMPTRANSLATE=$(which snmptranslate 2>/dev/null)
+	krc_status "OK ${aSMPTRANSLATE}" "Error snmptranslate missing"
+
+	echo -n "Check ${PROVIDES}..."
+	krc_status "ending"
+	;;
+*)
+	echo -n "Try ${0} check-env"
+	;;
+esac
