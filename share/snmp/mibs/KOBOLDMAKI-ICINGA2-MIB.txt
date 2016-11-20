@@ -1,6 +1,6 @@
 --
 -- Author: Uwe Ebel ( kobmaki @ aol . com )
--- Infos: Definition of the ICINGA2-MIB below koboldmaki root mib (1.3.6.1.4.1.12483) 
+-- Infos: Definition of the ICINGA2-MIB below the koboldmaki root mib (1.3.6.1.4.1.12483)
 --
 
 KOBOLDMAKI-ICINGA2-MIB DEFINITIONS ::= BEGIN
@@ -8,101 +8,227 @@ KOBOLDMAKI-ICINGA2-MIB DEFINITIONS ::= BEGIN
 IMPORTS
     MODULE-IDENTITY FROM SNMPv2-SMI
     OBJECT-IDENTITY FROM SNMPv2-SMI
-    OBJECT-TYPE	FROM SNMPv2-SMI
+    OBJECT-TYPE FROM SNMPv2-SMI
+    Integer32 FROM SNMPv2-SMI
 --    enterprises FROM SNMPv2-SMI
+
     NOTIFICATION-TYPE FROM SNMPv2-SMI
     NOTIFICATION-GROUP FROM SNMPv2-CONF
     MODULE-COMPLIANCE FROM SNMPv2-CONF
     OBJECT-GROUP FROM SNMPv2-CONF
+    TEXTUAL-CONVENTION FROM SNMPv2-TC
+--    DisplayString FROM SNMPv2-TC
     koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB;
         
 icinga2  MODULE-IDENTITY
-	    -- snmptranslate 1.3.6.1.4.1.12483.999.2 
-	    LAST-UPDATED "201512250001Z"
-	    ORGANIZATION "Uwe Ebel, koboldmaki"
-	    CONTACT-INFO "Uwe Ebel"
+            -- snmptranslate 1.3.6.1.4.1.12483.999.2
+            LAST-UPDATED "201610202359Z"
+            ORGANIZATION "Uwe Ebel, koboldmaki"
+            CONTACT-INFO "Uwe Ebel"
 
-	    DESCRIPTION "ICINGA2 MIB, see also at REVISION=LAST-UPDATED"
-	    
-	    REVISION "201512250001Z"
-	    DESCRIPTION "initial version"
+            DESCRIPTION "ICINGA2 MIB, see also at REVISION=LAST-UPDATED"
 
-	    -- snmptranslate enterprises 12483 
-	    ::= { koboldmaki-oss 2 }
+            REVISION "201610202359Z"
+            DESCRIPTION "WIP, add base fields."
 
+            REVISION "201512250001Z"
+            DESCRIPTION "initial version"
+
+            -- snmptranslate enterprises.12483.999.2
+            ::= { koboldmaki-oss 2 }
+
+--
+-- Some textual convention helper
+--
+
+I2Boolean ::= TEXTUAL-CONVENTION
+            STATUS   current
+           DESCRIPTION "Represent a false/true value."
+            SYNTAX   INTEGER {
+                false(0),
+                true(1)
+            }
+
+I2String ::= TEXTUAL-CONVENTION
+            STATUS   current
+            DESCRIPTION "Respresent a string."
+            SYNTAX OCTET STRING (SIZE (0..127))
+
+I2Timestamp ::= TEXTUAL-CONVENTION
+            STATUS current
+            DESCRIPTION "Represent a unix timestamp"
+            SYNTAX OCTET STRING
+
+I2Name ::= TEXTUAL-CONVENTION
+            STATUS current
+            DESCRIPTION "Something that is a name"
+            SYNTAX OCTET STRING (SIZE (0..127))
+
+I2DisplayName ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Something that is the display name"
+              SYNTAX OCTET STRING (SIZE (0..127))
+
+I2HostName ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Something that is the hostname (host_name)"
+              SYNTAX OCTET STRING (SIZE (0..127))
+
+I2Address ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Something that is the address of a host."
+              SYNTAX OCTET STRING (SIZE (0..127))
+
+I2Address6 ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Something that is the address (address6) of a host."
+              SYNTAX OCTET STRING (SIZE (0..127))
+
+I2CheckCommand ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Something that is check command name (check_command)."
+              SYNTAX OCTET STRING (SIZE (0..127))
+
+I2CheckInterval ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Check interval in seconds"
+              SYNTAX Integer32
+
+I2CheckTimeout ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Check timeout in seconds"
+              SYNTAX Integer32 (0..1024)
+
+I2MaxCheckAttempts ::= TEXTUAL-CONVENTION
+              STATUS current
+              DESCRIPTION "Max check attempts"
+              SYNTAX Integer32 (0..10)
+
+--
+-- Compliance
+--
 
 icinga2Compliance OBJECT-IDENTITY
              STATUS current
-	     DESCRIPTION "Compliance"
-	     ::= { icinga2 6 }
-	     
+             DESCRIPTION "Compliance"
+             ::= { icinga2 7 }
+
 icinga2Conformance OBJECT-IDENTITY
              STATUS current
-	     DESCRIPTION "Conformance"
-	     ::= { icinga2 5 }
-	     
+             DESCRIPTION "Conformance"
+             ::= { icinga2 6 }
+
 icinga2Groups OBJECT-IDENTITY
              STATUS current
-	     DESCRIPTION "Groups"
-	     ::= { icinga2 4 }
-	     
+             DESCRIPTION "Groups"
+             ::= { icinga2 5 }
+
 icinga2Traps OBJECT-IDENTITY
-	     STATUS  current
-	     DESCRIPTION "Trap type definitions"
-	    ::= { icinga2 3 }
+             STATUS  current
+             DESCRIPTION "Trap type definitions"
+            ::= { icinga2 4 }
 
 icinga2Notifications OBJECT-IDENTITY
             STATUS current
-	    DESCRIPTION "Parent of all notifications like traps, informations etc."
-            ::= { icinga2 2 }
+            DESCRIPTION "Parent of all notifications like traps, informations etc."
+            ::= { icinga2 3 }
+
+-- icinga2Notification  OBJECT IDENTIFIER ::= { icinga2Conformance 2 }
 
 icinga2Type OBJECT-IDENTITY
-	    STATUS current
-	    DESCRIPTION "All icinga type definitions like host, service, etc."
-            ::= {  icinga2 1 }
-	    
+            STATUS current
+            DESCRIPTION "All icinga type definitions like host, service, hostgroup, state  etc."
+            ::= {  icinga2 2 }
+
+--
+-- Defines all fieldnames
+--
+
+i2ObjectField OBJECT-IDENTITY
+            STATUS current
+            DESCRIPTION "All object fields."
+            ::= { icinga2 1 }
+
+i2Field OBJECT-IDENTITY
+           STATUS current
+           DESCRIPTION "Global object fields."
+           ::= { i2ObjectField 0 }
+
+i2DisplayName OBJECT-TYPE
+           SYNTAX I2String
+-- SYNTAX I2DisplayName
+           MAX-ACCESS read-write
+           STATUS current
+           DESCRIPTION "Display name"
+           ::= { i2Field 2 }
+
+i2HostField OBJECT-IDENTITY
+            STATUS current
+            DESCRIPTION "Host fields"
+            ::= { i2ObjectField 1 }
+
+i2HostName OBJECT-TYPE
+           SYNTAX I2HostName
+           MAX-ACCESS read-write
+           STATUS current
+           DESCRIPTION "Hostname"
+           ::= { i2HostField 1 }
+
+i2ServiceField OBJECT-IDENTITY
+            STATUS current
+            DESCRIPTION "Service fields"
+            ::= { i2ObjectField 2 }
+
+i2ContactField OBJECT-IDENTITY
+            STATUS current
+            DESCRIPTION "Contact"
+            ::= { i2ObjectField 10 }
 
 i2ObjectType OBJECT-TYPE
-	    SYNTAX INTEGER {
-	    host (1),
-	    service (2),
-	    hostgroup (3),
-	    servicegroup (4),
-	    hostescalation (5),
-	    serviceescalation (6),
-	    hostdependency (7),
-	    servicedependency (8),
-	    timeperiod (9),
-	    contact (10),
-	    contactgroup (11),
-	    command (12),
-	    endpoint (13),
-	    zone (14)
-	    }
-	    STATUS current
-	    DESCRIPTION "Objecttype, id mapping type"
-	    -- https://github.com/Icinga/icinga2/blob/master/lib/db_ido/dbobject.hpp
-	    ::= { icinga2Type 1}
-	    
+            SYNTAX INTEGER {
+            host (1),
+            service (2),
+            hostgroup (3),
+            servicegroup (4),
+            hostescalation (5),
+            serviceescalation (6),
+            hostdependency (7),
+            servicedependency (8),
+            timeperiod (9),
+            contact (10), -- User
+            contactgroup (11),
+            command (12),
+            endpoint (13),
+            zone (14)
+            }
+            --   MAX-ACCESS read-only
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION "Objecttype, id mapping type"
+            -- https://github.com/Icinga/icinga2/blob/master/lib/db_ido/dbobject.hpp
+            ::= { i2Field 1}
+
 i2StateType OBJECT-TYPE
             SYNTAX INTEGER {
                    stateTypeSoft (0),
                    stateTypeHard (1)
             }
-	    STATUS current
-	    DESCRIPTION "State type"
-	    -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti
-	    ::= { icinga2Type 3 }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION "State type, could be soft or hard."
+            -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/checkresult.ti
+            ::= { i2Field 3 }
 
 i2StateHost OBJECT-TYPE
              SYNTAX INTEGER {
                     hostUp (0),
                     hostDown (1)
                     }
-	     STATUS current
-	     DESCRIPTION "Host state"
-	     -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti"
-	     ::= { icinga2Type 4 }
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION "Host state"
+             -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
+             ::= { i2HostField 4 }
 
 i2StateService OBJECT-TYPE
              SYNTAX INTEGER {
@@ -112,88 +238,117 @@ i2StateService OBJECT-TYPE
                    serviceUnknown (3)
                    -- servicePending (4)
             }
-	    STATUS current
-	    DESCRIPTION "Service state"
-	    -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti
-	    ::= { icinga2Type 5 }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION "Service state"
+            -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
+            ::= { i2ServiceField 2 }
 
 i2NotificationType OBJECT-TYPE
            SYNTAX INTEGER {
-	   	  DowntimeStart(0),
-		  DowntimeEnd(1),
-		  DowntimeRemoved(2),
-		  Custom(3),
-		  Acknowledgement(4),
-		  Problem(5),
-		  Recovery(6),
-		  FlappingStart(7),
-		  FlappingEnd(8)
-	   }
-	   STATUS current
-	   DESCRIPTION "Notfication type"
-	   -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
-	   :: { icinga2Type 6 }
-	   
+                  downtimeStart(0),
+                  downtimeEnd(1),
+                  downtimeRemoved(2),
+                  custom(3),
+                  acknowledgement(4),
+                  problem(5),
+                  recovery(6),
+                  flappingStart(7),
+                  flappingEnd(8)
+           }
+           MAX-ACCESS not-accessible
+           STATUS current
+           DESCRIPTION "Notfication type"
+           -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
+           ::= { i2ObjectField 6 }
+
 I2Host ::= SEQUENCE {
-       i2StateHost INTEGER
+       i2StateHost INTEGER,
          }
 
 --
---
---
+-- Hosttrap
+-- .1 HostName
+-- .2 HostDisplay
+-- .3 HostAdress
+-- .4 HostState
+-- .5 NotifyDatetime
+-- .6 HostOutput
 i2NotificationHost NOTIFICATION-TYPE
-	   OBJECTS {
-	   i2StateHost
-	   }
-	   STATUS current
-	   DESCRIPTION "Host trap"
-	   ::= { icinga2Notifications 1 }
+           OBJECTS {
+           i2ObjectType,
+           i2StateHost
+           }
+           STATUS current
+           DESCRIPTION "Host trap"
+           --#TYPE         "HOSTTRAP"
+           --#SUMMARY      "Host %s is in state %s"
+           --#ARGUMENTS
+           ::= { icinga2Notifications 1 }
 
 i2NotificationService NOTIFICATION-TYPE
-	   OBJECTS {
-	   i2StateService
-	   }
-	   STATUS current
-	   DESCRIPTION "Service trap"
-	   ::= { icinga2Notifications 2 }
+           OBJECTS {
+           i2ObjectType,
+           i2StateService
+--         i2ServiceName
+           }
+           STATUS current
+           DESCRIPTION "Service trap"
+           ::= { icinga2Notifications 2 }
 
 i2ComplianceTypeGroup OBJECT-GROUP
            OBJECTS {
-	   i2ObjectType, i2StateType
-	   }
-	   STATUS current
-	   DESCRIPTION "Group for compliance"
+           i2ObjectType,
+           i2StateType,
+           i2StateHost,
+           i2DisplayName,
+           i2HostName
+           }
+           STATUS current
+           DESCRIPTION "Group of object for compliance"
            ::= { icinga2Groups 1 }
 
 i2ComplianceStateGroup  OBJECT-GROUP
-	   OBJECTS {
-	   i2StateService, i2StateHost
-	   }
-	   STATUS current
-	   DESCRIPTION "Group with state objects for compliance"
-	   ::= { icinga2Groups 2 }
-	   
+           OBJECTS {
+           i2ObjectType,
+           i2StateService,
+           i2StateHost
+           }
+           STATUS current
+           DESCRIPTION "Group with state objects for compliance"
+           ::= { icinga2Groups 2 }
+
 i2ComplianceNotificationGroup NOTIFICATION-GROUP
            NOTIFICATIONS {
-	   i2NotificationHost, i2NotificationService
-	   }
-	   STATUS current
-	   DESCRIPTION "Trap group for compliance"
-	   ::= { icinga2Groups 3 }
-	   
+           i2NotificationHost,
+           i2NotificationService
+           }
+           STATUS current
+           DESCRIPTION "Trap group for compliance."
+           ::= { icinga2Groups 3 }
+
+i2Host OBJECT-GROUP
+       OBJECTS {
+       i2StateHost
+       }
+       STATUS current
+       DESCRIPTION "Defines a Host entry"
+       ::= { icinga2Groups 4 }
+
 i2Compliance MODULE-COMPLIANCE
-	     STATUS current
-	     DESCRIPTION "A DES"
-	     MODULE
-	     
-	     GROUP i2ComplianceTypeGroup
-	     DESCRIPTION "Objects"
+             STATUS current
+             DESCRIPTION "Module desciption"
+             MODULE
 
-	     GROUP i2ComplianceStateGroup
-	     DESCRIPTION "Object Type"
+             GROUP i2ComplianceTypeGroup
+             DESCRIPTION "Objects"
 
-	     GROUP i2ComplianceNotificationGroup
-	     DESCRIPTION "Traps"
-	     ::= { icinga2Compliance 1 }
+             GROUP i2ComplianceStateGroup
+             DESCRIPTION "Object Type"
+
+             GROUP i2ComplianceNotificationGroup
+             DESCRIPTION "Traps"
+
+             ::= { icinga2Compliance 1 }
 END
 
