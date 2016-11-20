@@ -5,6 +5,9 @@
  * Derived from KOBOLDMAKI-ICINGA2-MIB:
  *   ICINGA2 MIB, see also at REVISION=LAST-UPDATED
  *
+ * Revision 2016-10-20 23:59:
+ *   WIP, add base fields.
+ *
  * Revision 2015-12-25 00:01:
  *   initial version
  *
@@ -25,7 +28,7 @@ module KOBOLDMAKI_ICINGA2_MIB {
     /*
              ICINGA2 MIB, see also at REVISION=LAST-UPDATED
 
-    LAST-UPDATED:   201512250001Z
+    LAST-UPDATED:   201610202359Z
 
     ORGANIZATION:
             "Uwe Ebel, koboldmaki"
@@ -33,11 +36,78 @@ module KOBOLDMAKI_ICINGA2_MIB {
     CONTACT-INFO:
             "Uwe Ebel"
 
+    REVISION:       "201610202359Z"
+    REVISION-DESCRIPTION:
+            "WIP, add base fields."
+
     REVISION:       "201512250001Z"
     REVISION-DESCRIPTION:
             "initial version"
 
     */
+
+    /*
+             Represent a false/true value.
+    */
+    typedef ASN1_Integer I2BooleanType; 
+    const I2BooleanType I2BooleanType_false = 0;
+    const I2BooleanType I2BooleanType_true = 1;
+    const string I2BooleanType_NameNumberList = "false (0) , true (1)";
+
+    /*
+             Respresent a string.
+    */
+    typedef ASN1_OctetString I2StringType; 
+
+    /*
+             Represent a unix timestamp
+    */
+    typedef ASN1_OctetString I2TimestampType; 
+
+    /*
+             Something that is a name
+    */
+    typedef ASN1_OctetString I2NameType; 
+
+    /*
+             Something that is the display name
+    */
+    typedef ASN1_OctetString I2DisplayNameType; 
+
+    /*
+             Something that is the hostname (host_name)
+    */
+    typedef ASN1_OctetString I2HostNameType; 
+
+    /*
+             Something that is the address of a host.
+    */
+    typedef ASN1_OctetString I2AddressType; 
+
+    /*
+             Something that is the address (address6) of a host.
+    */
+    typedef ASN1_OctetString I2Address6Type; 
+
+    /*
+             Something that is check command name (check_command).
+    */
+    typedef ASN1_OctetString I2CheckCommandType; 
+
+    /*
+             Check interval in seconds
+    */
+    typedef ASN1_Integer I2CheckIntervalType; 
+
+    /*
+             Check timeout in seconds
+    */
+    typedef ASN1_Integer I2CheckTimeoutType; 
+
+    /*
+             Max check attempts
+    */
+    typedef ASN1_Integer I2MaxCheckAttemptsType; 
 
     typedef ASN1_Integer I2ObjectTypeType; 
     const I2ObjectTypeType I2ObjectTypeType_host = 1;
@@ -61,39 +131,98 @@ module KOBOLDMAKI_ICINGA2_MIB {
     const I2StateTypeType I2StateTypeType_stateTypeHard = 1;
     const string I2StateTypeType_NameNumberList = "stateTypeSoft (0) , stateTypeHard (1)";
 
-    typedef ASN1_Integer I2HostStateType; 
-    const I2HostStateType I2HostStateType_hostUp = 0;
-    const I2HostStateType I2HostStateType_hostDown = 1;
-    const string I2HostStateType_NameNumberList = "hostUp (0) , hostDown (1)";
+    typedef ASN1_Integer I2StateHostType; 
+    const I2StateHostType I2StateHostType_hostUp = 0;
+    const I2StateHostType I2StateHostType_hostDown = 1;
+    const string I2StateHostType_NameNumberList = "hostUp (0) , hostDown (1)";
 
-    typedef ASN1_Integer I2ServiceStateType; 
-    const I2ServiceStateType I2ServiceStateType_serviceOK = 0;
-    const I2ServiceStateType I2ServiceStateType_serviceWarning = 1;
-    const I2ServiceStateType I2ServiceStateType_serviceCritical = 2;
-    const I2ServiceStateType I2ServiceStateType_serviceUnknown = 3;
-    const string I2ServiceStateType_NameNumberList = "serviceOK (0) , serviceWarning (1) , serviceCritical (2) , serviceUnknown (3)";
+    typedef ASN1_Integer I2StateServiceType; 
+    const I2StateServiceType I2StateServiceType_serviceOK = 0;
+    const I2StateServiceType I2StateServiceType_serviceWarning = 1;
+    const I2StateServiceType I2StateServiceType_serviceCritical = 2;
+    const I2StateServiceType I2StateServiceType_serviceUnknown = 3;
+    const string I2StateServiceType_NameNumberList = "serviceOK (0) , serviceWarning (1) , serviceCritical (2) , serviceUnknown (3)";
 
-    interface icinga2Type : SNMPMgmt::SmiEntry {
+    typedef ASN1_Integer I2NotificationTypeType; 
+    const I2NotificationTypeType I2NotificationTypeType_downtimeStart = 0;
+    const I2NotificationTypeType I2NotificationTypeType_downtimeEnd = 1;
+    const I2NotificationTypeType I2NotificationTypeType_downtimeRemoved = 2;
+    const I2NotificationTypeType I2NotificationTypeType_custom = 3;
+    const I2NotificationTypeType I2NotificationTypeType_acknowledgement = 4;
+    const I2NotificationTypeType I2NotificationTypeType_problem = 5;
+    const I2NotificationTypeType I2NotificationTypeType_recovery = 6;
+    const I2NotificationTypeType I2NotificationTypeType_flappingStart = 7;
+    const I2NotificationTypeType I2NotificationTypeType_flappingEnd = 8;
+    const string I2NotificationTypeType_NameNumberList = "downtimeStart (0) , downtimeEnd (1) , downtimeRemoved (2) , custom (3) , acknowledgement (4) , problem (5) , recovery (6) , flappingStart (7) , flappingEnd (8)";
+
+    interface i2ObjectField : SNMPMgmt::SmiEntry {
     };
 
-    struct I2HostStateVBType {
+    interface i2Field : SNMPMgmt::SmiEntry {
+
+        /*
+             Objecttype, id mapping type
+        */
+        attribute I2ObjectTypeType i2ObjectType;
+
+        /*
+             Display name
+        */
+        attribute I2StringType i2DisplayName;
+
+        /*
+             State type, could be soft or hard.
+        */
+        attribute I2StateTypeType i2StateType;
+    };
+
+    interface i2HostField : SNMPMgmt::SmiEntry {
+
+        /*
+             Hostname
+        */
+        attribute I2HostNameType i2HostName;
+
+        /*
+             Host state
+        */
+        readonly attribute I2StateHostType i2StateHost;
+    };
+
+    interface i2ServiceField : SNMPMgmt::SmiEntry {
+
+        /*
+             Service state
+        */
+        attribute I2StateServiceType i2StateService;
+    };
+
+    struct I2ObjectTypeVBType {
         string var_name;
         string var_index;
-        I2HostStateType i2HostState;
+        I2ObjectTypeType i2ObjectType;
     };
 
-    struct I2ServiceStateVBType {
+    struct I2StateHostVBType {
         string var_name;
         string var_index;
-        I2ServiceStateType i2ServiceState;
+        I2StateHostType i2StateHost;
     };
 
-    struct I2HostTrapType {
-        I2HostStateVBType i2HostState;
+    struct I2StateServiceVBType {
+        string var_name;
+        string var_index;
+        I2StateServiceType i2StateService;
     };
 
-    struct I2ServiceTrapType {
-        I2ServiceStateVBType i2ServiceState;
+    struct I2NotificationHostType {
+        I2ObjectTypeVBType i2ObjectType;
+        I2StateHostVBType i2StateHost;
+    };
+
+    struct I2NotificationServiceType {
+        I2ObjectTypeVBType i2ObjectType;
+        I2StateServiceVBType i2StateService;
     };
 
     /* typed push event communication */
@@ -102,21 +231,21 @@ module KOBOLDMAKI_ICINGA2_MIB {
         /*
              Host trap
         */
-        void i2HostTrap (
+        void i2NotificationHost (
             in CosNaming::Name src_entry_name,
             in CORBA::ScopedName event_type,
             in ASN1_GeneralizedTime event_time,
-            in I2HostTrapType notification_info
+            in I2NotificationHostType notification_info
         );
 
         /*
              Service trap
         */
-        void i2ServiceTrap (
+        void i2NotificationService (
             in CosNaming::Name src_entry_name,
             in CORBA::ScopedName event_type,
             in ASN1_GeneralizedTime event_time,
-            in I2ServiceTrapType notification_info
+            in I2NotificationServiceType notification_info
         );
     };
 
@@ -126,33 +255,62 @@ module KOBOLDMAKI_ICINGA2_MIB {
         /*
              Host trap
         */
-        void pull_i2HostTrap (
+        void pull_i2NotificationHost (
             out CosNaming::Name src_entry_name,
             out CORBA::ScopedName event_type,
             out ASN1_GeneralizedTime event_time,
-            out I2HostTrapType notification_info
+            out I2NotificationHostType notification_info
         );
-        boolean try_i2HostTrap (
+        boolean try_i2NotificationHost (
             out CosNaming::Name src_entry_name,
             out CORBA::ScopedName event_type,
             out ASN1_GeneralizedTime event_time,
-            out I2HostTrapType notification_info
+            out I2NotificationHostType notification_info
         );
 
         /*
              Service trap
         */
-        void pull_i2ServiceTrap (
+        void pull_i2NotificationService (
             out CosNaming::Name src_entry_name,
             out CORBA::ScopedName event_type,
             out ASN1_GeneralizedTime event_time,
-            out I2ServiceTrapType notification_info
+            out I2NotificationServiceType notification_info
         );
-        boolean try_i2ServiceTrap (
+        boolean try_i2NotificationService (
             out CosNaming::Name src_entry_name,
             out CORBA::ScopedName event_type,
             out ASN1_GeneralizedTime event_time,
-            out I2ServiceTrapType notification_info
+            out I2NotificationServiceType notification_info
+        );
+    };
+
+    interface SmiEntryFactory : SNMPMgmt::GenericFactory {
+
+        i2Field create_i2Field (
+            in I2ObjectTypeType i2ObjectType,
+            in I2StringType i2DisplayName,
+            in I2StateTypeType i2StateType
+        ) raises (
+            SNMPMgmt::AlreadyExists,
+            CosLifeCycle::InvalidCriteria,
+            CosLifeCycle::CannotMeetCriteria
+        );
+
+        i2HostField create_i2HostField (
+            in I2HostNameType i2HostName
+        ) raises (
+            SNMPMgmt::AlreadyExists,
+            CosLifeCycle::InvalidCriteria,
+            CosLifeCycle::CannotMeetCriteria
+        );
+
+        i2ServiceField create_i2ServiceField (
+            in I2StateServiceType i2StateService
+        ) raises (
+            SNMPMgmt::AlreadyExists,
+            CosLifeCycle::InvalidCriteria,
+            CosLifeCycle::CannotMeetCriteria
         );
     };
 

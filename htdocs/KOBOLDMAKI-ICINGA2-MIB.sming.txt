@@ -4,9 +4,11 @@
 module KOBOLDMAKI-ICINGA2-MIB {
 
   import SNMPv2-SMI          (MODULE-IDENTITY, OBJECT-IDENTITY, 
-                              OBJECT-TYPE, NOTIFICATION-TYPE);
+                              OBJECT-TYPE, Integer32, 
+                              NOTIFICATION-TYPE);
   import SNMPv2-CONF         (NOTIFICATION-GROUP, 
                               MODULE-COMPLIANCE, OBJECT-GROUP);
+  import SNMPv2-TC           (TEXTUAL-CONVENTION);
   import KOBOLDMAKI-ROOT-MIB (koboldmaki-oss);
 
 //
@@ -23,12 +25,105 @@ module KOBOLDMAKI-ICINGA2-MIB {
      "ICINGA2 MIB, see also at REVISION=LAST-UPDATED";
 
   revision {
+    date            "2016-10-20 23:59";
+    description     
+       "WIP, add base fields.";
+  };
+  revision {
     date            "2015-12-25 00:01";
     description     
        "initial version";
   };
 
   identity          icinga2;
+
+//
+// TYPE DEFINITIONS
+//
+
+  typedef I2Boolean {
+    type            Enumeration (false(0), true(1));
+    status          current;
+    description     
+       "Represent a false/true value.";
+  };
+
+  typedef I2String {
+    type            OctetString (0..127);
+    status          current;
+    description     
+       "Respresent a string.";
+  };
+
+  typedef I2Timestamp {
+    type            OctetString;
+    status          current;
+    description     
+       "Represent a unix timestamp";
+  };
+
+  typedef I2Name {
+    type            OctetString (0..127);
+    status          current;
+    description     
+       "Something that is a name";
+  };
+
+  typedef I2DisplayName {
+    type            OctetString (0..127);
+    status          current;
+    description     
+       "Something that is the display name";
+  };
+
+  typedef I2HostName {
+    type            OctetString (0..127);
+    status          current;
+    description     
+       "Something that is the hostname (host_name)";
+  };
+
+  typedef I2Address {
+    type            OctetString (0..127);
+    status          current;
+    description     
+       "Something that is the address of a host.";
+  };
+
+  typedef I2Address6 {
+    type            OctetString (0..127);
+    status          current;
+    description     
+       "Something that is the address (address6) of a host.";
+  };
+
+  typedef I2CheckCommand {
+    type            OctetString (0..127);
+    status          current;
+    description     
+       "Something that is check command name (check_command).";
+  };
+
+  typedef I2CheckInterval {
+    type            Integer32;
+    status          current;
+    description     
+       "Check interval in seconds";
+  };
+
+  typedef I2CheckTimeout {
+    type            Integer32 (0..1024);
+    status          current;
+    description     
+       "Check timeout in seconds";
+  };
+
+  typedef I2MaxCheckAttempts {
+    type            Integer32 (0..10);
+    status          current;
+    description     
+       "Max check attempts";
+  };
 
 //
 // OBJECT DEFINITIONS
@@ -39,14 +134,20 @@ module KOBOLDMAKI-ICINGA2-MIB {
     oid             koboldmaki-oss.2;
   };
 
-  node icinga2Type {
+  node i2ObjectField {
     oid             icinga2.1;
     description     
-       "All icinga type definitions like host, service, etc.";
+       "All object fields.";
+  };
+
+  node i2Field {
+    oid             i2ObjectField.0;
+    description     
+       "Global object fields.";
   };
 
   scalar i2ObjectType {
-    oid             icinga2Type.1;
+    oid             i2Field.1;
     type            Enumeration (host(1), service(2), 
                       hostgroup(3), servicegroup(4), 
                       hostescalation(5), serviceescalation(6), 
@@ -54,63 +155,115 @@ module KOBOLDMAKI-ICINGA2-MIB {
                       timeperiod(9), contact(10), 
                       contactgroup(11), command(12), 
                       endpoint(13), zone(14));
+    access          readwrite;
     description     
        "Objecttype, id mapping type";
   };
 
+  scalar i2DisplayName {
+    oid             i2Field.2;
+    type            I2String;
+    access          readwrite;
+    description     
+       "Display name";
+  };
+
   scalar i2StateType {
-    oid             icinga2Type.3;
+    oid             i2Field.3;
     type            Enumeration (stateTypeSoft(0), 
                       stateTypeHard(1));
+    access          readwrite;
     description     
-       "Service state";
-    reference       
-       "https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti";
+       "State type, could be soft or hard.";
   };
 
-  scalar i2HostState {
-    oid             icinga2Type.4;
+  node i2HostField {
+    oid             i2ObjectField.1;
+    description     
+       "Host fields";
+  };
+
+  scalar i2HostName {
+    oid             i2HostField.1;
+    type            I2HostName;
+    access          readwrite;
+    description     
+       "Hostname";
+  };
+
+  scalar i2StateHost {
+    oid             i2HostField.4;
     type            Enumeration (hostUp(0), hostDown(1));
+    access          readonly;
     description     
        "Host state";
-    reference       
-       "https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti";
   };
 
-  scalar i2ServiceState {
-    oid             icinga2Type.5;
+  node i2ServiceField {
+    oid             i2ObjectField.2;
+    description     
+       "Service fields";
+  };
+
+  scalar i2StateService {
+    oid             i2ServiceField.2;
     type            Enumeration (serviceOK(0), serviceWarning(1), 
                       serviceCritical(2), serviceUnknown(3));
+    access          readwrite;
     description     
-       "Service state, https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti";
+       "Service state";
+  };
+
+  scalar i2NotificationType {
+    oid             i2ObjectField.6;
+    type            Enumeration (downtimeStart(0), 
+                      downtimeEnd(1), downtimeRemoved(2), 
+                      custom(3), acknowledgement(4), problem(5), 
+                      recovery(6), flappingStart(7), 
+                      flappingEnd(8));
+    access          noaccess;
+    description     
+       "Notfication type";
+  };
+
+  node i2ContactField {
+    oid             i2ObjectField.10;
+    description     
+       "Contact";
+  };
+
+  node icinga2Type {
+    oid             icinga2.2;
+    description     
+       "All icinga type definitions like host, service, hostgroup, state  etc.";
   };
 
   node icinga2Notifications {
-    oid             icinga2.2;
+    oid             icinga2.3;
     description     
        "Parent of all notifications like traps, informations etc.";
   };
 
   node icinga2Traps {
-    oid             icinga2.3;
+    oid             icinga2.4;
     description     
        "Trap type definitions";
   };
 
   node icinga2Groups {
-    oid             icinga2.4;
+    oid             icinga2.5;
+    description     
+       "Groups";
+  };
+
+  node icinga2Conformance {
+    oid             icinga2.6;
     description     
        "Conformance";
   };
 
-  node icinga2Conformance {
-    oid             icinga2.5;
-    description     
-       "Compliance";
-  };
-
   node icinga2Compliance {
-    oid             icinga2.6;
+    oid             icinga2.7;
     description     
        "Compliance";
   };
@@ -119,16 +272,16 @@ module KOBOLDMAKI-ICINGA2-MIB {
 // NOTIFICATION DEFINITIONS
 //
 
-  notification i2HostTrap {
+  notification i2NotificationHost {
     oid             icinga2Notifications.1;
-    objects         (i2HostState);
+    objects         (i2ObjectType, i2StateHost);
     description     
        "Host trap";
   };
 
-  notification i2ServiceTrap {
+  notification i2NotificationService {
     oid             icinga2Notifications.2;
-    objects         (i2ServiceState);
+    objects         (i2ObjectType, i2StateService);
     description     
        "Service trap";
   };
@@ -139,23 +292,31 @@ module KOBOLDMAKI-ICINGA2-MIB {
 
   group i2ComplianceTypeGroup {
     oid             icinga2Groups.1;
-    members         (i2ObjectType, i2StateType);
+    members         (i2ObjectType, i2StateType, i2StateHost, 
+                     i2DisplayName, i2HostName);
     description     
-       "Group for compliance";
+       "Group of object for compliance";
   };
 
   group i2ComplianceStateGroup {
     oid             icinga2Groups.2;
-    members         (i2ServiceState, i2HostState);
+    members         (i2ObjectType, i2StateService, i2StateHost);
     description     
        "Group with state objects for compliance";
   };
 
-  group i2ComplianceTrapGroup {
+  group i2ComplianceNotificationGroup {
     oid             icinga2Groups.3;
-    members         (i2HostTrap, i2ServiceTrap);
+    members         (i2NotificationHost, i2NotificationService);
     description     
-       "Trap group for compliance";
+       "Trap group for compliance.";
+  };
+
+  group i2Host {
+    oid             icinga2Groups.4;
+    members         (i2StateHost);
+    description     
+       "Defines a Host entry";
   };
 
 //
@@ -165,7 +326,7 @@ module KOBOLDMAKI-ICINGA2-MIB {
   compliance i2Compliance {
     oid             icinga2Compliance.1;
     description     
-       "A DES";
+       "Module desciption";
 
     optional i2ComplianceTypeGroup {
       description   
@@ -175,7 +336,7 @@ module KOBOLDMAKI-ICINGA2-MIB {
       description   
          "Object Type";
     };
-    optional i2ComplianceTrapGroup {
+    optional i2ComplianceNotificationGroup {
       description   
          "Traps";
     };

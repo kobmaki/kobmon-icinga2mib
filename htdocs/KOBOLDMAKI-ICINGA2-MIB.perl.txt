@@ -21,6 +21,11 @@
         'ICINGA2 MIB, see also at REVISION=LAST-UPDATED',
     "revisions" => [
         {
+            "date" => "2016-10-20 23:59",
+            "description" =>
+                'WIP, add base fields.',
+        },
+        {
             "date" => "2015-12-25 00:01",
             "description" =>
                 'initial version',
@@ -36,6 +41,7 @@
                 "MODULE-IDENTITY",
                 "OBJECT-IDENTITY",
                 "OBJECT-TYPE",
+                "Integer32",
                 "NOTIFICATION-TYPE",
             ]
         },
@@ -48,6 +54,12 @@
             ]
         },
         {
+            "module" => "SNMPv2-TC",
+            "names" => [
+                "TEXTUAL-CONVENTION",
+            ]
+        },
+        {
             "module" => "KOBOLDMAKI-ROOT-MIB",
             "names" => [
                 "koboldmaki-oss",
@@ -56,6 +68,173 @@
     ], # imports
 
     #    Module Body
+    "typedefs" => {
+        "I2Boolean" => {
+            "basetype" => "Enumeration",
+            "status" => "current",
+            "false" => "0",
+            "true" => "1",
+            "description" =>
+                'Represent a false/true value.',
+        }, # I2Boolean
+        "I2String" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "127"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "127"
+            },
+            "description" =>
+                'Respresent a string.',
+        }, # I2String
+        "I2Timestamp" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "description" =>
+                'Represent a unix timestamp',
+        }, # I2Timestamp
+        "I2Name" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "127"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "127"
+            },
+            "description" =>
+                'Something that is a name',
+        }, # I2Name
+        "I2DisplayName" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "127"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "127"
+            },
+            "description" =>
+                'Something that is the display name',
+        }, # I2DisplayName
+        "I2HostName" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "127"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "127"
+            },
+            "description" =>
+                'Something that is the hostname (host_name)',
+        }, # I2HostName
+        "I2Address" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "127"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "127"
+            },
+            "description" =>
+                'Something that is the address of a host.',
+        }, # I2Address
+        "I2Address6" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "127"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "127"
+            },
+            "description" =>
+                'Something that is the address (address6) of a host.',
+        }, # I2Address6
+        "I2CheckCommand" => {
+            "basetype" => "OctetString",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "127"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "127"
+            },
+            "description" =>
+                'Something that is check command name (check_command).',
+        }, # I2CheckCommand
+        "I2CheckInterval" => {
+            "basetype" => "Integer32",
+            "status" => "current",
+            "description" =>
+                'Check interval in seconds',
+        }, # I2CheckInterval
+        "I2CheckTimeout" => {
+            "basetype" => "Integer32",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "1024"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "1024"
+            },
+            "description" =>
+                'Check timeout in seconds',
+        }, # I2CheckTimeout
+        "I2MaxCheckAttempts" => {
+            "basetype" => "Integer32",
+            "status" => "current",
+            "ranges" => (
+            {
+                "min" => "0",
+                "max" => "10"
+            },
+            ),
+            "range" => {
+                "min" => "0",
+                "max" => "10"
+            },
+            "description" =>
+                'Max check attempts',
+        }, # I2MaxCheckAttempts
+    }, # typedefs
+
     "nodes" => [
         {
             "name" => "icinga2",
@@ -65,19 +244,28 @@
             "status" => "current",
         }, # icinga2
         {
-            "name" => "icinga2Type",
+            "name" => "i2ObjectField",
             "type" => "node",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
             "oid" => "1.3.6.1.4.1.12483.999.2.1",
             "status" => "current",
             "description" =>
-                'All icinga type definitions like host, service, etc.',
-        }, # icinga2Type
+                'All object fields.',
+        }, # i2ObjectField
+        {
+            "name" => "i2Field",
+            "type" => "node",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.0",
+            "status" => "current",
+            "description" =>
+                'Global object fields.',
+        }, # i2Field
         {
             "name" => "i2ObjectType",
             "type" => "scalar",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.1.1",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.0.1",
             "status" => "current",
             "description" =>
                 'Objecttype, id mapping type',
@@ -101,17 +289,29 @@
                     "zone" => "14",
                 },
             },
+            "access" => "readwrite",
         }, # i2ObjectType
+        {
+            "name" => "i2DisplayName",
+            "type" => "scalar",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.0.2",
+            "status" => "current",
+            "description" =>
+                'Display name',
+            "syntax" => {
+                "type" => { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "I2String"},
+            },
+            "access" => "readwrite",
+        }, # i2DisplayName
         {
             "name" => "i2StateType",
             "type" => "scalar",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.1.3",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.0.3",
             "status" => "current",
             "description" =>
-                'Service state',
-            "reference>" =>
-                'https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti',
+                'State type, could be soft or hard.',
             "syntax" => {
                 "type" => 
                 {
@@ -120,17 +320,38 @@
                     "stateTypeHard" => "1",
                 },
             },
+            "access" => "readwrite",
         }, # i2StateType
         {
-            "name" => "i2HostState",
+            "name" => "i2HostField",
+            "type" => "node",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.1",
+            "status" => "current",
+            "description" =>
+                'Host fields',
+        }, # i2HostField
+        {
+            "name" => "i2HostName",
             "type" => "scalar",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.1.4",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.1.1",
+            "status" => "current",
+            "description" =>
+                'Hostname',
+            "syntax" => {
+                "type" => { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "I2HostName"},
+            },
+            "access" => "readwrite",
+        }, # i2HostName
+        {
+            "name" => "i2StateHost",
+            "type" => "scalar",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.1.4",
             "status" => "current",
             "description" =>
                 'Host state',
-            "reference>" =>
-                'https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti',
             "syntax" => {
                 "type" => 
                 {
@@ -139,15 +360,25 @@
                     "hostDown" => "1",
                 },
             },
-        }, # i2HostState
+            "access" => "readonly",
+        }, # i2StateHost
         {
-            "name" => "i2ServiceState",
-            "type" => "scalar",
+            "name" => "i2ServiceField",
+            "type" => "node",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.1.5",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.2",
             "status" => "current",
             "description" =>
-                'Service state, https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti',
+                'Service fields',
+        }, # i2ServiceField
+        {
+            "name" => "i2StateService",
+            "type" => "scalar",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.2.2",
+            "status" => "current",
+            "description" =>
+                'Service state',
             "syntax" => {
                 "type" => 
                 {
@@ -158,12 +389,56 @@
                     "serviceUnknown" => "3",
                 },
             },
-        }, # i2ServiceState
+            "access" => "readwrite",
+        }, # i2StateService
+        {
+            "name" => "i2NotificationType",
+            "type" => "scalar",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.6",
+            "status" => "current",
+            "description" =>
+                'Notfication type',
+            "syntax" => {
+                "type" => 
+                {
+                    "basetype" => "Enumeration",
+                    "downtimeStart" => "0",
+                    "downtimeEnd" => "1",
+                    "downtimeRemoved" => "2",
+                    "custom" => "3",
+                    "acknowledgement" => "4",
+                    "problem" => "5",
+                    "recovery" => "6",
+                    "flappingStart" => "7",
+                    "flappingEnd" => "8",
+                },
+            },
+            "access" => "noaccess",
+        }, # i2NotificationType
+        {
+            "name" => "i2ContactField",
+            "type" => "node",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.1.10",
+            "status" => "current",
+            "description" =>
+                'Contact',
+        }, # i2ContactField
+        {
+            "name" => "icinga2Type",
+            "type" => "node",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.2",
+            "status" => "current",
+            "description" =>
+                'All icinga type definitions like host, service, hostgroup, state  etc.',
+        }, # icinga2Type
         {
             "name" => "icinga2Notifications",
             "type" => "node",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.2",
+            "oid" => "1.3.6.1.4.1.12483.999.2.3",
             "status" => "current",
             "description" =>
                 'Parent of all notifications like traps, informations etc.',
@@ -172,7 +447,7 @@
             "name" => "icinga2Traps",
             "type" => "node",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.3",
+            "oid" => "1.3.6.1.4.1.12483.999.2.4",
             "status" => "current",
             "description" =>
                 'Trap type definitions',
@@ -181,25 +456,25 @@
             "name" => "icinga2Groups",
             "type" => "node",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.4",
+            "oid" => "1.3.6.1.4.1.12483.999.2.5",
             "status" => "current",
             "description" =>
-                'Conformance',
+                'Groups',
         }, # icinga2Groups
         {
             "name" => "icinga2Conformance",
             "type" => "node",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.5",
+            "oid" => "1.3.6.1.4.1.12483.999.2.6",
             "status" => "current",
             "description" =>
-                'Compliance',
+                'Conformance',
         }, # icinga2Conformance
         {
             "name" => "icinga2Compliance",
             "type" => "node",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.6",
+            "oid" => "1.3.6.1.4.1.12483.999.2.7",
             "status" => "current",
             "description" =>
                 'Compliance',
@@ -208,29 +483,31 @@
 
     "notifications" => [
         {
-            "name" => "i2HostTrap",
+            "name" => "i2NotificationHost",
             "type" => "notification",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.2.1",
+            "oid" => "1.3.6.1.4.1.12483.999.2.3.1",
             "status" => "current",
             "description" =>
                 'Host trap',
             "objects" => [
-                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2HostState" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2ObjectType" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2StateHost" },
             ],
-        }, # i2HostTrap
+        }, # i2NotificationHost
         {
-            "name" => "i2ServiceTrap",
+            "name" => "i2NotificationService",
             "type" => "notification",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.2.2",
+            "oid" => "1.3.6.1.4.1.12483.999.2.3.2",
             "status" => "current",
             "description" =>
                 'Service trap',
             "objects" => [
-                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2ServiceState" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2ObjectType" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2StateService" },
             ],
-        }, # i2ServiceTrap
+        }, # i2NotificationService
     ], # notifications
 
     "groups" => [
@@ -238,41 +515,57 @@
             "name" => "i2ComplianceTypeGroup",
             "type" => "group",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.4.1",
+            "oid" => "1.3.6.1.4.1.12483.999.2.5.1",
             "status" => "current",
             "description" =>
-                'Group for compliance',
+                'Group of object for compliance',
             "members" => [
                 { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2ObjectType" },
                 { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2StateType" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2StateHost" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2DisplayName" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2HostName" },
             ], # members
         }, # i2ComplianceTypeGroup
         {
             "name" => "i2ComplianceStateGroup",
             "type" => "group",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.4.2",
+            "oid" => "1.3.6.1.4.1.12483.999.2.5.2",
             "status" => "current",
             "description" =>
                 'Group with state objects for compliance',
             "members" => [
-                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2ServiceState" },
-                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2HostState" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2ObjectType" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2StateService" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2StateHost" },
             ], # members
         }, # i2ComplianceStateGroup
         {
-            "name" => "i2ComplianceTrapGroup",
+            "name" => "i2ComplianceNotificationGroup",
             "type" => "group",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.4.3",
+            "oid" => "1.3.6.1.4.1.12483.999.2.5.3",
             "status" => "current",
             "description" =>
-                'Trap group for compliance',
+                'Trap group for compliance.',
             "members" => [
-                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2HostTrap" },
-                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2ServiceTrap" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2NotificationHost" },
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2NotificationService" },
             ], # members
-        }, # i2ComplianceTrapGroup
+        }, # i2ComplianceNotificationGroup
+        {
+            "name" => "i2Host",
+            "type" => "group",
+            "module" => "KOBOLDMAKI-ICINGA2-MIB",
+            "oid" => "1.3.6.1.4.1.12483.999.2.5.4",
+            "status" => "current",
+            "description" =>
+                'Defines a Host entry',
+            "members" => [
+                { "module" => "KOBOLDMAKI-ICINGA2-MIB", "name" => "i2StateHost" },
+            ], # members
+        }, # i2Host
     ], # groups
 
     "compliances" => [
@@ -280,10 +573,10 @@
             "name" => "i2Compliance",
             "type" => "compliance",
             "module" => "KOBOLDMAKI-ICINGA2-MIB",
-            "oid" => "1.3.6.1.4.1.12483.999.2.6.1",
+            "oid" => "1.3.6.1.4.1.12483.999.2.7.1",
             "status" => "current",
             "description" =>
-                'A DES',
+                'Module desciption',
             "requires" => [
                 "i2ComplianceTypeGroup" => {
                     "type" => "optional",
@@ -297,7 +590,7 @@
                     "description" =>
                         'Object Type',
                 },
-                "i2ComplianceTrapGroup" => {
+                "i2ComplianceNotificationGroup" => {
                     "type" => "optional",
                     "module" => "KOBOLDMAKI-ICINGA2-MIB",
                     "description" =>
