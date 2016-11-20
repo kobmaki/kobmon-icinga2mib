@@ -263,7 +263,7 @@ i2NotificationType OBJECT-TYPE
            ::= { i2ObjectField 6 }
 
 I2Host ::= SEQUENCE {
-       i2StateHost INTEGER,
+       i2StateHost INTEGER
          }
 
 --
