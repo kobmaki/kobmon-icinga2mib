@@ -15,6 +15,11 @@
     <description>
         ICINGA2 MIB, see also at REVISION=LAST-UPDATED
     </description>
+    <revision date="2016-10-20 23:59">
+      <description>
+          WIP, add base fields.
+      </description>
+    </revision>
     <revision date="2015-12-25 00:01">
       <description>
           initial version
@@ -27,22 +32,103 @@
     <import module="SNMPv2-SMI" name="MODULE-IDENTITY"/>
     <import module="SNMPv2-SMI" name="OBJECT-IDENTITY"/>
     <import module="SNMPv2-SMI" name="OBJECT-TYPE"/>
+    <import module="SNMPv2-SMI" name="Integer32"/>
     <import module="SNMPv2-SMI" name="NOTIFICATION-TYPE"/>
     <import module="SNMPv2-CONF" name="NOTIFICATION-GROUP"/>
     <import module="SNMPv2-CONF" name="MODULE-COMPLIANCE"/>
     <import module="SNMPv2-CONF" name="OBJECT-GROUP"/>
+    <import module="SNMPv2-TC" name="TEXTUAL-CONVENTION"/>
     <import module="KOBOLDMAKI-ROOT-MIB" name="koboldmaki-oss"/>
   </imports>
+
+  <typedefs>
+    <typedef name="I2Boolean" basetype="Enumeration" status="current">
+      <namednumber name="false" number="0"/>
+      <namednumber name="true" number="1"/>
+      <description>
+          Represent a false/true value.
+      </description>
+    </typedef>
+    <typedef name="I2String" basetype="OctetString" status="current">
+      <range min="0" max="127"/>
+      <description>
+          Respresent a string.
+      </description>
+    </typedef>
+    <typedef name="I2Timestamp" basetype="OctetString" status="current">
+      <description>
+          Represent a unix timestamp
+      </description>
+    </typedef>
+    <typedef name="I2Name" basetype="OctetString" status="current">
+      <range min="0" max="127"/>
+      <description>
+          Something that is a name
+      </description>
+    </typedef>
+    <typedef name="I2DisplayName" basetype="OctetString" status="current">
+      <range min="0" max="127"/>
+      <description>
+          Something that is the display name
+      </description>
+    </typedef>
+    <typedef name="I2HostName" basetype="OctetString" status="current">
+      <range min="0" max="127"/>
+      <description>
+          Something that is the hostname (host_name)
+      </description>
+    </typedef>
+    <typedef name="I2Address" basetype="OctetString" status="current">
+      <range min="0" max="127"/>
+      <description>
+          Something that is the address of a host.
+      </description>
+    </typedef>
+    <typedef name="I2Address6" basetype="OctetString" status="current">
+      <range min="0" max="127"/>
+      <description>
+          Something that is the address (address6) of a host.
+      </description>
+    </typedef>
+    <typedef name="I2CheckCommand" basetype="OctetString" status="current">
+      <range min="0" max="127"/>
+      <description>
+          Something that is check command name (check_command).
+      </description>
+    </typedef>
+    <typedef name="I2CheckInterval" basetype="Integer32" status="current">
+      <description>
+          Check interval in seconds
+      </description>
+    </typedef>
+    <typedef name="I2CheckTimeout" basetype="Integer32" status="current">
+      <range min="0" max="1024"/>
+      <description>
+          Check timeout in seconds
+      </description>
+    </typedef>
+    <typedef name="I2MaxCheckAttempts" basetype="Integer32" status="current">
+      <range min="0" max="10"/>
+      <description>
+          Max check attempts
+      </description>
+    </typedef>
+  </typedefs>
 
   <nodes>
     <node name="icinga2" oid="1.3.6.1.4.1.12483.999.2" status="current">
     </node>
-    <node name="icinga2Type" oid="1.3.6.1.4.1.12483.999.2.1" status="current">
+    <node name="i2ObjectField" oid="1.3.6.1.4.1.12483.999.2.1" status="current">
       <description>
-          All icinga type definitions like host, service, etc.
+          All object fields.
       </description>
     </node>
-    <scalar name="i2ObjectType" oid="1.3.6.1.4.1.12483.999.2.1.1" status="current">
+    <node name="i2Field" oid="1.3.6.1.4.1.12483.999.2.1.0" status="current">
+      <description>
+          Global object fields.
+      </description>
+    </node>
+    <scalar name="i2ObjectType" oid="1.3.6.1.4.1.12483.999.2.1.0.1" status="current">
       <syntax>
         <typedef basetype="Enumeration">
           <namednumber name="host" number="1"/>
@@ -61,39 +147,64 @@
           <namednumber name="zone" number="14"/>
         </typedef>
       </syntax>
+      <access>readwrite</access>
       <description>
           Objecttype, id mapping type
       </description>
     </scalar>
-    <scalar name="i2StateType" oid="1.3.6.1.4.1.12483.999.2.1.3" status="current">
+    <scalar name="i2DisplayName" oid="1.3.6.1.4.1.12483.999.2.1.0.2" status="current">
+      <syntax>
+        <type module="KOBOLDMAKI-ICINGA2-MIB" name="I2String"/>
+      </syntax>
+      <access>readwrite</access>
+      <description>
+          Display name
+      </description>
+    </scalar>
+    <scalar name="i2StateType" oid="1.3.6.1.4.1.12483.999.2.1.0.3" status="current">
       <syntax>
         <typedef basetype="Enumeration">
           <namednumber name="stateTypeSoft" number="0"/>
           <namednumber name="stateTypeHard" number="1"/>
         </typedef>
       </syntax>
+      <access>readwrite</access>
       <description>
-          Service state
+          State type, could be soft or hard.
       </description>
-      <reference>
-          https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti
-      </reference>
     </scalar>
-    <scalar name="i2HostState" oid="1.3.6.1.4.1.12483.999.2.1.4" status="current">
+    <node name="i2HostField" oid="1.3.6.1.4.1.12483.999.2.1.1" status="current">
+      <description>
+          Host fields
+      </description>
+    </node>
+    <scalar name="i2HostName" oid="1.3.6.1.4.1.12483.999.2.1.1.1" status="current">
+      <syntax>
+        <type module="KOBOLDMAKI-ICINGA2-MIB" name="I2HostName"/>
+      </syntax>
+      <access>readwrite</access>
+      <description>
+          Hostname
+      </description>
+    </scalar>
+    <scalar name="i2StateHost" oid="1.3.6.1.4.1.12483.999.2.1.1.4" status="current">
       <syntax>
         <typedef basetype="Enumeration">
           <namednumber name="hostUp" number="0"/>
           <namednumber name="hostDown" number="1"/>
         </typedef>
       </syntax>
+      <access>readonly</access>
       <description>
           Host state
       </description>
-      <reference>
-          https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti
-      </reference>
     </scalar>
-    <scalar name="i2ServiceState" oid="1.3.6.1.4.1.12483.999.2.1.5" status="current">
+    <node name="i2ServiceField" oid="1.3.6.1.4.1.12483.999.2.1.2" status="current">
+      <description>
+          Service fields
+      </description>
+    </node>
+    <scalar name="i2StateService" oid="1.3.6.1.4.1.12483.999.2.1.2.2" status="current">
       <syntax>
         <typedef basetype="Enumeration">
           <namednumber name="serviceOK" number="0"/>
@@ -102,31 +213,61 @@
           <namednumber name="serviceUnknown" number="3"/>
         </typedef>
       </syntax>
+      <access>readwrite</access>
       <description>
-          Service state, https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti
+          Service state
       </description>
     </scalar>
-    <node name="icinga2Notifications" oid="1.3.6.1.4.1.12483.999.2.2" status="current">
+    <scalar name="i2NotificationType" oid="1.3.6.1.4.1.12483.999.2.1.6" status="current">
+      <syntax>
+        <typedef basetype="Enumeration">
+          <namednumber name="downtimeStart" number="0"/>
+          <namednumber name="downtimeEnd" number="1"/>
+          <namednumber name="downtimeRemoved" number="2"/>
+          <namednumber name="custom" number="3"/>
+          <namednumber name="acknowledgement" number="4"/>
+          <namednumber name="problem" number="5"/>
+          <namednumber name="recovery" number="6"/>
+          <namednumber name="flappingStart" number="7"/>
+          <namednumber name="flappingEnd" number="8"/>
+        </typedef>
+      </syntax>
+      <access>noaccess</access>
+      <description>
+          Notfication type
+      </description>
+    </scalar>
+    <node name="i2ContactField" oid="1.3.6.1.4.1.12483.999.2.1.10" status="current">
+      <description>
+          Contact
+      </description>
+    </node>
+    <node name="icinga2Type" oid="1.3.6.1.4.1.12483.999.2.2" status="current">
+      <description>
+          All icinga type definitions like host, service, hostgroup, state  etc.
+      </description>
+    </node>
+    <node name="icinga2Notifications" oid="1.3.6.1.4.1.12483.999.2.3" status="current">
       <description>
           Parent of all notifications like traps, informations etc.
       </description>
     </node>
-    <node name="icinga2Traps" oid="1.3.6.1.4.1.12483.999.2.3" status="current">
+    <node name="icinga2Traps" oid="1.3.6.1.4.1.12483.999.2.4" status="current">
       <description>
           Trap type definitions
       </description>
     </node>
-    <node name="icinga2Groups" oid="1.3.6.1.4.1.12483.999.2.4" status="current">
+    <node name="icinga2Groups" oid="1.3.6.1.4.1.12483.999.2.5" status="current">
+      <description>
+          Groups
+      </description>
+    </node>
+    <node name="icinga2Conformance" oid="1.3.6.1.4.1.12483.999.2.6" status="current">
       <description>
           Conformance
       </description>
     </node>
-    <node name="icinga2Conformance" oid="1.3.6.1.4.1.12483.999.2.5" status="current">
-      <description>
-          Compliance
-      </description>
-    </node>
-    <node name="icinga2Compliance" oid="1.3.6.1.4.1.12483.999.2.6" status="current">
+    <node name="icinga2Compliance" oid="1.3.6.1.4.1.12483.999.2.7" status="current">
       <description>
           Compliance
       </description>
@@ -134,17 +275,19 @@
   </nodes>
 
   <notifications>
-    <notification name="i2HostTrap" oid="1.3.6.1.4.1.12483.999.2.2.1" status="current">
+    <notification name="i2NotificationHost" oid="1.3.6.1.4.1.12483.999.2.3.1" status="current">
       <objects>
-        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2HostState"/>
+        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
+        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
       </objects>
       <description>
           Host trap
       </description>
     </notification>
-    <notification name="i2ServiceTrap" oid="1.3.6.1.4.1.12483.999.2.2.2" status="current">
+    <notification name="i2NotificationService" oid="1.3.6.1.4.1.12483.999.2.3.2" status="current">
       <objects>
-        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2ServiceState"/>
+        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
+        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateService"/>
       </objects>
       <description>
           Service trap
@@ -153,39 +296,51 @@
   </notifications>
 
   <groups>
-    <group name="i2ComplianceTypeGroup" oid="1.3.6.1.4.1.12483.999.2.4.1" status="current">
+    <group name="i2ComplianceTypeGroup" oid="1.3.6.1.4.1.12483.999.2.5.1" status="current">
       <members>
         <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
         <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateType"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2DisplayName"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2HostName"/>
       </members>
       <description>
-          Group for compliance
+          Group of object for compliance
       </description>
     </group>
-    <group name="i2ComplianceStateGroup" oid="1.3.6.1.4.1.12483.999.2.4.2" status="current">
+    <group name="i2ComplianceStateGroup" oid="1.3.6.1.4.1.12483.999.2.5.2" status="current">
       <members>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2ServiceState"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2HostState"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateService"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
       </members>
       <description>
           Group with state objects for compliance
       </description>
     </group>
-    <group name="i2ComplianceTrapGroup" oid="1.3.6.1.4.1.12483.999.2.4.3" status="current">
+    <group name="i2ComplianceNotificationGroup" oid="1.3.6.1.4.1.12483.999.2.5.3" status="current">
       <members>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2HostTrap"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2ServiceTrap"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2NotificationHost"/>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2NotificationService"/>
       </members>
       <description>
-          Trap group for compliance
+          Trap group for compliance.
+      </description>
+    </group>
+    <group name="i2Host" oid="1.3.6.1.4.1.12483.999.2.5.4" status="current">
+      <members>
+        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
+      </members>
+      <description>
+          Defines a Host entry
       </description>
     </group>
   </groups>
 
   <compliances>
-    <compliance name="i2Compliance" oid="1.3.6.1.4.1.12483.999.2.6.1" status="current">
+    <compliance name="i2Compliance" oid="1.3.6.1.4.1.12483.999.2.7.1" status="current">
       <description>
-          A DES
+          Module desciption
       </description>
       <requires>
         <option module="KOBOLDMAKI-ICINGA2-MIB" name="i2ComplianceTypeGroup">
@@ -198,7 +353,7 @@
               Object Type
           </description>
         </option>
-        <option module="KOBOLDMAKI-ICINGA2-MIB" name="i2ComplianceTrapGroup">
+        <option module="KOBOLDMAKI-ICINGA2-MIB" name="i2ComplianceNotificationGroup">
           <description>
               Traps
           </description>

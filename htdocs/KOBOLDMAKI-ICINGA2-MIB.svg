@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg preserveAspectRatio="xMinYMin meet"
-     width="1100" height="700" viewBox="0.00 0.00 366.00 105.00"
+     width="1100" height="700" viewBox="0.00 0.00 977.00 90.00"
      version="1.1"
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -23,10 +23,10 @@ text.tooltip {
 //Author: Dr. Thomas Meinike 11/03 - thomas@handmadecode.de
 var svgdoc,svgroot,paths,revert;
 var collapsed = new Array(2);
-var name = new Array(26);
-var clickStatus = new Array(26);
-var redCount = new Array(26);
-var salmonCount = new Array(26);
+var name = new Array(31);
+var clickStatus = new Array(31);
+var redCount = new Array(31);
+var salmonCount = new Array(31);
 var moveObj,rect,x,y,attr1,attr2,wert1,wert2,zoom=1,active=false;
 
 function MoveObj(evt)
@@ -39,8 +39,8 @@ function MoveObj(evt)
 
 	x=evt.clientX()
 	y=evt.clientY()
-	wert1=(x-ctx)*zoom*0.33+0.00+attr1-5;
-	wert2=(y-cty)*zoom*0.33+0.00+attr2-5;
+	wert1=(x-ctx)*zoom*0.89+0.00+attr1-5;
+	wert2=(y-cty)*zoom*0.89+0.00+attr2-5;
 	roundx=Math.round(wert1*100)/100;
 	roundy=Math.round(wert2*100)/100;
 
@@ -467,13 +467,13 @@ function hideInfos(evt, obj, svgdoc, targetX, targetY, targetID, attr)
 function init(evt)
 {
     var nodenames, startnode, endnode, attr, i, j, k, l, m, nodesx, nodeex;
-    collapsed[0] = new Array(22);
-    collapsed[1] = new Array(22);
-    for (i=0; i<22; i++) {
+    collapsed[0] = new Array(24);
+    collapsed[1] = new Array(24);
+    for (i=0; i<24; i++) {
         collapsed[0][i] = 0;
         collapsed[1][i] = 0;
     }
-    for (i=0; i<26; i++) {
+    for (i=0; i<31; i++) {
 	name[i] = "";
 	clickStatus[i] = 0;
 	redCount[i] = 0;
@@ -520,7 +520,7 @@ function setStatus(evt, color1, color2)
     var clickObjName = clickObj.getAttribute('id');
 
     //find i corresponding to the clicked object
-    for (i=0; i<26; i++) {
+    for (i=0; i<31; i++) {
 	if (name[i] == "") {
 	    name[i] = clickObjName;
 	    break;
@@ -567,14 +567,14 @@ function changeColor(evt, targetObjName, color1, color2)
     var targetObj = svgDocument.getElementById(targetObjName);
 
     //find i corresponding to the clicked object
-    for (i=0; i<26; i++) {
+    for (i=0; i<31; i++) {
 	if (name[i] != clickObjName)
 	    continue;
 	break;
     }
 
     //find j corresponding to the target object
-    for (j=0; j<26; j++) {
+    for (j=0; j<31; j++) {
 	if (name[j] == "") {
 	    name[j] = targetObjName;
 	    break;
@@ -606,14 +606,14 @@ function colorText(targetObjName, color)
     var targetObj = svgDocument.getElementById(targetObjName);
 
     //find i corresponding to the target object
-    for (i=0; i<26; i++) {
+    for (i=0; i<31; i++) {
 	if (name[i] != targetObjName)
 	    continue;
 	break;
     }
 
     //color text
-    if (i == 26) {
+    if (i == 31) {
 	targetObj.setAttribute("style","fill: "+color);
 	return;
     }
@@ -647,29 +647,68 @@ function colorText(targetObjName, color)
    </marker>
  </defs>
 
-  <g transform="translate(108.00,52.50)">
-    <rect id="icinga2Type" x="-98.00" y="-42.50" width="196.00" height="85.00"
+  <g transform="translate(101.00,45.00)">
+    <rect id="i2Field" x="-91.00" y="-35.00" width="182.00" height="70.00"
           fill="white" stroke="black"/>
-    <rect x="-96.00" y="-40.50" width="16" height="16" rx="4" ry="4" stroke-width="3" stroke="gray" fill="white"
+    <rect x="-89.00" y="-33.00" width="16" height="16" rx="4" ry="4" stroke-width="3" stroke="gray" fill="white"
           onmousedown="ClickObj(evt)" onclick="ClickObj(evt)" onmousemove="MoveObj(evt)" onmouseup="OutOfObj(evt)" onmouseout="OutOfObj(evt)"/>
-    <polygon points="-98.00 -22.50 98.00 -22.50"
+    <polygon points="-91.00 -15.00 91.00 -15.00"
           fill="none" stroke="black"/>
-    <text x="0" y="-27.50" fill="rgb(0%,0%,0%)" style="text-anchor:middle; font-weight:bold">
-         icinga2Type</text>
-  <text id="i2ObjectType" fill="rgb(0%,0%,0%)" x="-92.00" y="-7.50">
-    <tspan style="text-anchor:middle">+</tspan><tspan x="-88.00" onmousemove="ShowTooltipMZ(evt,'Objecttype, id mapping type')" onmouseout="HideTooltip(evt)">i2ObjectType:</tspan>
+    <text x="0" y="-20.00" fill="rgb(0%,0%,0%)" style="text-anchor:middle; font-weight:bold">
+         i2Field</text>
+  <text id="i2ObjectType" fill="rgb(0%,0%,0%)" x="-85.00" y="0.00">
+    <tspan style="text-anchor:middle">+</tspan><tspan x="-81.00" onmousemove="ShowTooltipMZ(evt,'Objecttype, id mapping type')" onmouseout="HideTooltip(evt)">i2ObjectType:</tspan>
     <tspan onmousemove="ShowTooltipMZ(evt,'This is a basetype.')" onmouseout="HideTooltip(evt)">Enumeration</tspan></text>
-  <text id="i2StateType" fill="rgb(0%,0%,0%)" x="-92.00" y="7.50">
-    <tspan style="text-anchor:middle">+</tspan><tspan x="-88.00" onmousemove="ShowTooltipMZ(evt,'Service state')" onmouseout="HideTooltip(evt)">i2StateType:</tspan>
-    <tspan onmousemove="ShowTooltipMZ(evt,'This is a basetype.')" onmouseout="HideTooltip(evt)">Enumeration</tspan></text>
-  <text id="i2HostState" fill="rgb(0%,0%,0%)" x="-92.00" y="22.50">
-    <tspan style="text-anchor:middle">+</tspan><tspan x="-88.00" onmousemove="ShowTooltipMZ(evt,'Host state')" onmouseout="HideTooltip(evt)">i2HostState:</tspan>
-    <tspan onmousemove="ShowTooltipMZ(evt,'This is a basetype.')" onmouseout="HideTooltip(evt)">Enumeration</tspan></text>
-  <text id="i2ServiceState" fill="rgb(0%,0%,0%)" x="-92.00" y="37.50">
-    <tspan style="text-anchor:middle">+</tspan><tspan x="-88.00" onmousemove="ShowTooltipMZ(evt,'Service state, https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkable.ti')" onmouseout="HideTooltip(evt)">i2ServiceState:</tspan>
+  <text id="i2DisplayName" fill="rgb(0%,0%,0%)" x="-85.00" y="15.00">
+    <tspan style="text-anchor:middle">+</tspan><tspan x="-81.00" onmousemove="ShowTooltipMZ(evt,'Display name')" onmouseout="HideTooltip(evt)">i2DisplayName:</tspan>
+    <tspan onmousemove="ShowTooltipMZ(evt,'Respresent a string.')" onmouseout="HideTooltip(evt)">I2String</tspan></text>
+  <text id="i2StateType" fill="rgb(0%,0%,0%)" x="-85.00" y="30.00">
+    <tspan style="text-anchor:middle">+</tspan><tspan x="-81.00" onmousemove="ShowTooltipMZ(evt,'State type, could be soft or hard.')" onmouseout="HideTooltip(evt)">i2StateType:</tspan>
     <tspan onmousemove="ShowTooltipMZ(evt,'This is a basetype.')" onmouseout="HideTooltip(evt)">Enumeration</tspan></text>
   </g>
- <g transform="translate(216.00,10.00) scale(0.26)">
+  <g transform="translate(289.50,45.00)">
+    <rect id="i2HostField" x="-87.50" y="-27.50" width="175.00" height="55.00"
+          fill="white" stroke="black"/>
+    <rect x="-85.50" y="-25.50" width="16" height="16" rx="4" ry="4" stroke-width="3" stroke="gray" fill="white"
+          onmousedown="ClickObj(evt)" onclick="ClickObj(evt)" onmousemove="MoveObj(evt)" onmouseup="OutOfObj(evt)" onmouseout="OutOfObj(evt)"/>
+    <polygon points="-87.50 -7.50 87.50 -7.50"
+          fill="none" stroke="black"/>
+    <text x="0" y="-12.50" fill="rgb(0%,0%,0%)" style="text-anchor:middle; font-weight:bold">
+         i2HostField</text>
+  <text id="i2HostName" fill="rgb(0%,0%,0%)" x="-81.50" y="7.50">
+    <tspan style="text-anchor:middle">+</tspan><tspan x="-77.50" onmousemove="ShowTooltipMZ(evt,'Hostname')" onmouseout="HideTooltip(evt)">i2HostName:</tspan>
+    <tspan onmousemove="ShowTooltipMZ(evt,'Something that is the hostname (host_name)')" onmouseout="HideTooltip(evt)">I2HostName</tspan></text>
+  <text id="i2StateHost" fill="rgb(0%,0%,0%)" x="-81.50" y="22.50">
+    <tspan style="text-anchor:middle">+</tspan><tspan x="-77.50" onmousemove="ShowTooltipMZ(evt,'Host state')" onmouseout="HideTooltip(evt)">i2StateHost:</tspan>
+    <tspan onmousemove="ShowTooltipMZ(evt,'This is a basetype.')" onmouseout="HideTooltip(evt)">Enumeration</tspan></text>
+  </g>
+  <g transform="translate(485.00,45.00)">
+    <rect id="i2ServiceField" x="-98.00" y="-20.00" width="196.00" height="40.00"
+          fill="white" stroke="black"/>
+    <rect x="-96.00" y="-18.00" width="16" height="16" rx="4" ry="4" stroke-width="3" stroke="gray" fill="white"
+          onmousedown="ClickObj(evt)" onclick="ClickObj(evt)" onmousemove="MoveObj(evt)" onmouseup="OutOfObj(evt)" onmouseout="OutOfObj(evt)"/>
+    <polygon points="-98.00 0.00 98.00 0.00"
+          fill="none" stroke="black"/>
+    <text x="0" y="-5.00" fill="rgb(0%,0%,0%)" style="text-anchor:middle; font-weight:bold">
+         i2ServiceField</text>
+  <text id="i2StateService" fill="rgb(0%,0%,0%)" x="-92.00" y="15.00">
+    <tspan style="text-anchor:middle">+</tspan><tspan x="-88.00" onmousemove="ShowTooltipMZ(evt,'Service state')" onmouseout="HideTooltip(evt)">i2StateService:</tspan>
+    <tspan onmousemove="ShowTooltipMZ(evt,'This is a basetype.')" onmouseout="HideTooltip(evt)">Enumeration</tspan></text>
+  </g>
+  <g transform="translate(705.00,45.00)">
+    <rect id="i2ObjectField" x="-112.00" y="-20.00" width="224.00" height="40.00"
+          fill="white" stroke="black"/>
+    <rect x="-110.00" y="-18.00" width="16" height="16" rx="4" ry="4" stroke-width="3" stroke="gray" fill="white"
+          onmousedown="ClickObj(evt)" onclick="ClickObj(evt)" onmousemove="MoveObj(evt)" onmouseup="OutOfObj(evt)" onmouseout="OutOfObj(evt)"/>
+    <polygon points="-112.00 0.00 112.00 0.00"
+          fill="none" stroke="black"/>
+    <text x="0" y="-5.00" fill="rgb(0%,0%,0%)" style="text-anchor:middle; font-weight:bold">
+         i2ObjectField</text>
+  <text id="i2NotificationType" fill="rgb(0%,0%,0%)" x="-106.00" y="15.00">
+    <tspan style="text-anchor:middle">-</tspan><tspan x="-102.00" onmousemove="ShowTooltipMZ(evt,'Notfication type')" onmouseout="HideTooltip(evt)">i2NotificationType:</tspan>
+    <tspan onmousemove="ShowTooltipMZ(evt,'This is a basetype.')" onmouseout="HideTooltip(evt)">Enumeration</tspan></text>
+  </g>
+ <g transform="translate(827.00,10.00) scale(0.21)">
  <g id="MI0" transform="translate(0.00,10.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
@@ -683,97 +722,103 @@ function colorText(targetObjName, color)
   </text>
  </g>
  <g id="MI2" transform="translate(35.00,40.00)">
+  <text onmousemove="ShowTooltipMZ(evt,'WIP, add base fields.')" onmouseout="HideTooltip(evt)">2016-10-20 23:59</text>
+ </g>
+ <g id="MI3" transform="translate(35.00,55.00)">
   <text onmousemove="ShowTooltipMZ(evt,'initial version')" onmouseout="HideTooltip(evt)">2015-12-25 00:01</text>
  </g>
- <g id="MI3" transform="translate(0.00,70.00)">
+ <g id="MI4" transform="translate(0.00,85.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">Notifications</tspan>
   </text>
  </g>
- <g id="MI4" transform="translate(15.00,85.00)">
+ <g id="MI5" transform="translate(15.00,100.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">KOBOLDMAKI-ICINGA2-MIB</tspan>
   </text>
  </g>
- <g id="MI5" transform="translate(35.00,100.00)">
-  <text id="i2HostTrap" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Host trap');colorText('i2HostState','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2HostState','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2HostState','rgb(0%,0%,0%)')">i2HostTrap</text>
- </g>
  <g id="MI6" transform="translate(35.00,115.00)">
-  <text id="i2ServiceTrap" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Service trap');colorText('i2ServiceState','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2ServiceState','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ServiceState','rgb(0%,0%,0%)')">i2ServiceTrap</text>
+  <text id="i2NotificationHost" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Host trap');colorText('i2ObjectType','red');colorText('i2StateHost','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateHost','rgb(0%,0%,0%)')">i2NotificationHost</text>
  </g>
- <g id="MI7" transform="translate(0.00,145.00)">
+ <g id="MI7" transform="translate(35.00,130.00)">
+  <text id="i2NotificationService" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Service trap');colorText('i2ObjectType','red');colorText('i2StateService','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateService','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateService','rgb(0%,0%,0%)')">i2NotificationService</text>
+ </g>
+ <g id="MI8" transform="translate(0.00,160.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">Object Groups</tspan>
   </text>
  </g>
- <g id="MI8" transform="translate(15.00,160.00)">
+ <g id="MI9" transform="translate(15.00,175.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">KOBOLDMAKI-ICINGA2-MIB</tspan>
   </text>
  </g>
- <g id="MI9" transform="translate(35.00,175.00)">
-  <text id="i2ComplianceTypeGroup" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Group for compliance');colorText('i2ObjectType','red');colorText('i2StateType','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateType','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateType','rgb(0%,0%,0%)')">i2ComplianceTypeGroup</text>
- </g>
  <g id="MI10" transform="translate(35.00,190.00)">
-  <text id="i2ComplianceStateGroup" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Group with state objects for compliance');colorText('i2ServiceState','red');colorText('i2HostState','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2ServiceState','red','rgb(0%,0%,0%)');changeColor(evt,'i2HostState','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ServiceState','rgb(0%,0%,0%)');colorText('i2HostState','rgb(0%,0%,0%)')">i2ComplianceStateGroup</text>
+  <text id="i2ComplianceTypeGroup" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Group of object for compliance');colorText('i2ObjectType','red');colorText('i2StateType','red');colorText('i2StateHost','red');colorText('i2DisplayName','red');colorText('i2HostName','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','red','rgb(0%,0%,0%)');changeColor(evt,'i2DisplayName','red','rgb(0%,0%,0%)');changeColor(evt,'i2HostName','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateType','rgb(0%,0%,0%)');colorText('i2StateHost','rgb(0%,0%,0%)');colorText('i2DisplayName','rgb(0%,0%,0%)');colorText('i2HostName','rgb(0%,0%,0%)')">i2ComplianceTypeGroup</text>
  </g>
- <g id="MI11" transform="translate(0.00,220.00)">
+ <g id="MI11" transform="translate(35.00,205.00)">
+  <text id="i2ComplianceStateGroup" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Group with state objects for compliance');colorText('i2ObjectType','red');colorText('i2StateService','red');colorText('i2StateHost','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateService','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateService','rgb(0%,0%,0%)');colorText('i2StateHost','rgb(0%,0%,0%)')">i2ComplianceStateGroup</text>
+ </g>
+ <g id="MI12" transform="translate(35.00,220.00)">
+  <text id="i2Host" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Defines a Host entry');colorText('i2StateHost','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2StateHost','rgb(0%,0%,0%)')">i2Host</text>
+ </g>
+ <g id="MI13" transform="translate(0.00,250.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">Notification Groups</tspan>
   </text>
  </g>
- <g id="MI12" transform="translate(15.00,235.00)">
+ <g id="MI14" transform="translate(15.00,265.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">KOBOLDMAKI-ICINGA2-MIB</tspan>
   </text>
  </g>
- <g id="MI13" transform="translate(35.00,250.00)">
-  <text id="i2ComplianceTrapGroup" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Trap group for compliance');colorText('i2HostTrap','red');colorText('i2HostState','red');colorText('i2ServiceTrap','red');colorText('i2ServiceState','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2HostTrap','red','rgb(0%,0%,0%)');changeColor(evt,'i2HostState','red','rgb(0%,0%,0%)');changeColor(evt,'i2ServiceTrap','red','rgb(0%,0%,0%)');changeColor(evt,'i2ServiceState','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2HostTrap','rgb(0%,0%,0%)');colorText('i2HostState','rgb(0%,0%,0%)');colorText('i2ServiceTrap','rgb(0%,0%,0%)');colorText('i2ServiceState','rgb(0%,0%,0%)')">i2ComplianceTrapGroup</text>
+ <g id="MI15" transform="translate(35.00,280.00)">
+  <text id="i2ComplianceNotificationGroup" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Trap group for compliance.');colorText('i2NotificationHost','red');colorText('i2ObjectType','red');colorText('i2StateHost','red');colorText('i2NotificationService','red');colorText('i2ObjectType','red');colorText('i2StateService','red')" onclick="setStatus(evt,'red','rgb(0%,0%,0%)');changeColor(evt,'i2NotificationHost','red','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','red','rgb(0%,0%,0%)');changeColor(evt,'i2NotificationService','red','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','red','rgb(0%,0%,0%)');changeColor(evt,'i2StateService','red','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2NotificationHost','rgb(0%,0%,0%)');colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateHost','rgb(0%,0%,0%)');colorText('i2NotificationService','rgb(0%,0%,0%)');colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateService','rgb(0%,0%,0%)')">i2ComplianceNotificationGroup</text>
  </g>
- <g id="MI14" transform="translate(0.00,280.00)">
+ <g id="MI16" transform="translate(0.00,310.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">Compliance Statements</tspan>
   </text>
  </g>
- <g id="MI15" transform="translate(15.00,295.00)">
+ <g id="MI17" transform="translate(15.00,325.00)">
   <text>
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
    <tspan x="5">KOBOLDMAKI-ICINGA2-MIB</tspan>
   </text>
  </g>
- <g id="MI16" transform="translate(30.00,310.00)">
+ <g id="MI18" transform="translate(30.00,340.00)">
   <text fill="rgb(0%,0%,0%)">
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
-   <tspan x="5" onmousemove="ShowTooltipMZ(evt,'A DES')" onmouseout="HideTooltip(evt)">i2Compliance</tspan>
+   <tspan x="5" onmousemove="ShowTooltipMZ(evt,'Module desciption')" onmouseout="HideTooltip(evt)">i2Compliance</tspan>
   </text>
  </g>
- <g id="MI17" transform="translate(45.00,325.00)">
+ <g id="MI19" transform="translate(45.00,355.00)">
   <text fill="rgb(0%,0%,0%)">
    <tspan style="text-anchor:middle" onclick="collapse(evt)">--</tspan>
     <tspan x="5">KOBOLDMAKI-ICINGA2-MIB</tspan>
   </text>
  </g>
- <g id="MI18" transform="translate(65.00,340.00)">
+ <g id="MI20" transform="translate(65.00,370.00)">
   <text id="mandatorygroupsi2ComplianceKOBOLDMAKI-ICINGA2-MIB" fill="rgb(0%,0%,0%)">Mandatory Groups</text>
  </g>
- <g id="MI19" transform="translate(65.00,355.00)">
-  <text id="groupi2Compliancei2ComplianceTypeGroupKOBOLDMAKI-ICINGA2-MIB" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Objects');colorText('i2ComplianceTypeGroup','salmon');colorText('i2ObjectType','salmon');colorText('i2StateType','salmon')" onclick="setStatus(evt,'salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ComplianceTypeGroup','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2StateType','salmon','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ComplianceTypeGroup','rgb(0%,0%,0%)');colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateType','rgb(0%,0%,0%)')">Group i2ComplianceTypeGroup</text>
- </g>
- <g id="MI20" transform="translate(65.00,370.00)">
-  <text id="groupi2Compliancei2ComplianceStateGroupKOBOLDMAKI-ICINGA2-MIB" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Object Type');colorText('i2ComplianceStateGroup','salmon');colorText('i2ServiceState','salmon');colorText('i2HostState','salmon')" onclick="setStatus(evt,'salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ComplianceStateGroup','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ServiceState','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2HostState','salmon','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ComplianceStateGroup','rgb(0%,0%,0%)');colorText('i2ServiceState','rgb(0%,0%,0%)');colorText('i2HostState','rgb(0%,0%,0%)')">Group i2ComplianceStateGroup</text>
- </g>
  <g id="MI21" transform="translate(65.00,385.00)">
-  <text id="groupi2Compliancei2ComplianceTrapGroupKOBOLDMAKI-ICINGA2-MIB" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Traps');colorText('i2ComplianceTrapGroup','salmon');colorText('i2HostTrap','salmon');colorText('i2HostState','salmon');colorText('i2ServiceTrap','salmon');colorText('i2ServiceState','salmon')" onclick="setStatus(evt,'salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ComplianceTrapGroup','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2HostTrap','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2HostState','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ServiceTrap','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ServiceState','salmon','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ComplianceTrapGroup','rgb(0%,0%,0%)');colorText('i2HostTrap','rgb(0%,0%,0%)');colorText('i2HostState','rgb(0%,0%,0%)');colorText('i2ServiceTrap','rgb(0%,0%,0%)');colorText('i2ServiceState','rgb(0%,0%,0%)')">Group i2ComplianceTrapGroup</text>
+  <text id="groupi2Compliancei2ComplianceTypeGroupKOBOLDMAKI-ICINGA2-MIB" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Objects');colorText('i2ComplianceTypeGroup','salmon');colorText('i2ObjectType','salmon');colorText('i2StateType','salmon');colorText('i2StateHost','salmon');colorText('i2DisplayName','salmon');colorText('i2HostName','salmon')" onclick="setStatus(evt,'salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ComplianceTypeGroup','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2StateType','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2DisplayName','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2HostName','salmon','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ComplianceTypeGroup','rgb(0%,0%,0%)');colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateType','rgb(0%,0%,0%)');colorText('i2StateHost','rgb(0%,0%,0%)');colorText('i2DisplayName','rgb(0%,0%,0%)');colorText('i2HostName','rgb(0%,0%,0%)')">Group i2ComplianceTypeGroup</text>
+ </g>
+ <g id="MI22" transform="translate(65.00,400.00)">
+  <text id="groupi2Compliancei2ComplianceStateGroupKOBOLDMAKI-ICINGA2-MIB" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Object Type');colorText('i2ComplianceStateGroup','salmon');colorText('i2ObjectType','salmon');colorText('i2StateService','salmon');colorText('i2StateHost','salmon')" onclick="setStatus(evt,'salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ComplianceStateGroup','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2StateService','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','salmon','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ComplianceStateGroup','rgb(0%,0%,0%)');colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateService','rgb(0%,0%,0%)');colorText('i2StateHost','rgb(0%,0%,0%)')">Group i2ComplianceStateGroup</text>
+ </g>
+ <g id="MI23" transform="translate(65.00,415.00)">
+  <text id="groupi2Compliancei2ComplianceNotificationGroupKOBOLDMAKI-ICINGA2-MIB" fill="rgb(0%,0%,0%)" onmousemove="ShowTooltipMZ(evt,'Traps');colorText('i2ComplianceNotificationGroup','salmon');colorText('i2NotificationHost','salmon');colorText('i2ObjectType','salmon');colorText('i2StateHost','salmon');colorText('i2NotificationService','salmon');colorText('i2ObjectType','salmon');colorText('i2StateService','salmon')" onclick="setStatus(evt,'salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ComplianceNotificationGroup','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2NotificationHost','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2StateHost','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2NotificationService','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2ObjectType','salmon','rgb(0%,0%,0%)');changeColor(evt,'i2StateService','salmon','rgb(0%,0%,0%)')" onmouseout="HideTooltip(evt);colorText('i2ComplianceNotificationGroup','rgb(0%,0%,0%)');colorText('i2NotificationHost','rgb(0%,0%,0%)');colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateHost','rgb(0%,0%,0%)');colorText('i2NotificationService','rgb(0%,0%,0%)');colorText('i2ObjectType','rgb(0%,0%,0%)');colorText('i2StateService','rgb(0%,0%,0%)')">Group i2ComplianceNotificationGroup</text>
  </g>
  </g>
- <g transform="translate(0.00,0.00) scale(0.33)">
+ <g transform="translate(0.00,0.00) scale(0.89)">
  <g id="tooltip" style="visibility: hidden">
    <rect id="ttr" x="0" y="0" rx="5" ry="5" width="100" height="16"/>
    <line id="ttl" x1="0" y1="0" x2="0" y2="0"/>
