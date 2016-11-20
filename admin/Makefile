@@ -1,7 +1,7 @@
 #
 #
 # Makefile for kobmon-icinga2mib
-# Author: Uwe Ebel ( komaki @ aol . com )
+# Author: Uwe Ebel ( kobmaki @ aol . com )
 #
 
 
@@ -31,14 +31,19 @@ smidump-create:
 	@echo "Start smidump-create"
 	@smidump -f svg ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.svg
 	@smidump -f xml ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.xml
-	@smidump -f smiv2 ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.smiv2.txt
+	@smidump -f cm ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.dia
+#	@smidump -f smiv2 ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.smiv2.txt
 	@smidump -f sming ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.sming.txt
 	@smidump -f perl ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.perl.txt
 	@smidump -f sppi ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.sppi.txt
-	@smidump -f compliances ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.compliance.txt
+#	@smidump -f compliances ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.compliance.txt
 	@@smidump -f corba ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.corba.txt
+#	@@smidump -f identifiers ../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt > ../htdocs/KOBOLDMAKI-ICINGA2-MIB.identifiers.txt
+	@./smidump-create-formats.sh
 	@mv KOBOLDMAKI_ICINGA2_MIB.idl ../htdocs/KOBOLDMAKI_ICINGA2_MIB.idl.corba.txt
 	@mv KOBOLDMAKI_ICINGA2_MIB.oid ../htdocs/KOBOLDMAKI_ICINGA2_MIB.oid.corba.txt
+	@mv *.c ../htdocs/
+	@mv *.h ../htdocs/
 	@echo "End smidump-create"
 
 
