@@ -46,5 +46,10 @@ smidump-create:
 	@mv *.h ../htdocs/
 	@echo "End smidump-create"
 
+snmptt-conf:
+	@echo "Start snmptt-conf"
+	@snmpttconvertmib  --in=../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt --out=../htdocs/KOBOLDMAKI-ICINGA2-MIB.snmptt.conf
+	@echo "End snmptt-conf"
+
 
 
