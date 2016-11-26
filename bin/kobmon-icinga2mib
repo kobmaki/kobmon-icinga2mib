@@ -49,6 +49,6 @@ check-env)
 	krc_status "ending"
 	;;
 *)
-	echo -n "Try ${0} check-env"
+	echo "Try ${0} check-env"
 	;;
 esac
