@@ -11,6 +11,7 @@ default:
 	@echo "smilint-check - check the mib"
 	@echo "smilint-check-strong - stronger check"
 	@echo "smidump-create - create some smidumps"
+	@echo "snmptt-conf - create a snmptt conf file from the mib"
 
 check-env:
 	@echo "Start check-env"
@@ -48,6 +49,7 @@ smidump-create:
 
 snmptt-conf:
 	@echo "Start snmptt-conf"
+	@rm ../htdocs/KOBOLDMAKI-ICINGA2-MIB.snmptt.conf
 	@snmpttconvertmib  --in=../share/snmp/mibs/KOBOLDMAKI-ICINGA2-MIB.txt --out=../htdocs/KOBOLDMAKI-ICINGA2-MIB.snmptt.conf
 	@echo "End snmptt-conf"
 
