@@ -29,7 +29,7 @@ icinga2 MODULE-IDENTITY
         "ICINGA2 MIB, see also at REVISION=LAST-UPDATED"
     REVISION    "201610202359Z"
     DESCRIPTION
-        "WIP, add base fields."
+        "WIP, add base attributs."
     REVISION    "201512250001Z"
     DESCRIPTION
         "initial version"
@@ -43,6 +43,7 @@ I2BooleanTC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Represent a false/true value."
+    REFERENCE "TODO"
     SYNTAX      INTEGER { false(0), true(1) }
 
 I2StringTC ::= TEXTUAL-CONVENTION
@@ -50,13 +51,15 @@ I2StringTC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Respresent a string."
+    REFERENCE "TODO"
     SYNTAX      OCTET STRING (SIZE(0..127))
 
-I2TimeStamp ::= TEXTUAL-CONVENTION
+I2TimeStampTC ::= TEXTUAL-CONVENTION
     DISPLAY-HINT "30a"
     STATUS      current
     DESCRIPTION
         "Represent a unix timestamp"
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/base/datetime.ti"
     SYNTAX      OCTET STRING
 
 I2NameTC ::= TEXTUAL-CONVENTION
@@ -64,6 +67,7 @@ I2NameTC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Something that is a name"
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/base/configobject.ti"
     SYNTAX      OCTET STRING (SIZE(0..127))
 
 I2DisplayNameTC ::= TEXTUAL-CONVENTION
@@ -71,13 +75,26 @@ I2DisplayNameTC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Something that is the display name"
+    REFERENCE "TODO"
     SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2HaModeTC ::= TEXTUAL-CONVENTION
+--    DISPLAY-HINT ""
+    STATUS current
+    DESCRIPTION
+	"What HA Mode is used."
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/base/configobject.ti"
+    SYNTAX INTEGER {
+    	haRunOnce(0),
+	haRunEverywhere(1)
+	}
 
 I2HostNameTC ::= TEXTUAL-CONVENTION
     DISPLAY-HINT "127a"
     STATUS      current
     DESCRIPTION
         "Something that is the hostname (host_name)"
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/icinga/host.ti"
     SYNTAX      OCTET STRING (SIZE(0..127))
 
 I2AddressTC ::= TEXTUAL-CONVENTION
@@ -85,6 +102,7 @@ I2AddressTC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Something that is the address of a host."
+    REFERENCE "TODO"
     SYNTAX      OCTET STRING (SIZE(0..127))
 
 I2Address6TC ::= TEXTUAL-CONVENTION
@@ -92,6 +110,7 @@ I2Address6TC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Something that is the address (address6) of a host."
+    REFERENCE "TODO"
     SYNTAX      OCTET STRING (SIZE(0..127))
 
 I2CheckCommandTC ::= TEXTUAL-CONVENTION
@@ -99,6 +118,7 @@ I2CheckCommandTC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Something that is check command name (check_command)."
+    REFERENCE "TODO"
     SYNTAX      OCTET STRING (SIZE(0..127))
 
 I2CheckIntervalTC ::= TEXTUAL-CONVENTION
@@ -106,29 +126,32 @@ I2CheckIntervalTC ::= TEXTUAL-CONVENTION
     STATUS      current
     DESCRIPTION
         "Check interval in seconds"
+    REFERENCE "TODO"
     SYNTAX      Integer32 (0..999999)
 
-I2CheckTimeout ::= TEXTUAL-CONVENTION
+I2CheckTimeoutTC ::= TEXTUAL-CONVENTION
     DISPLAY-HINT "d"
     STATUS      current
     DESCRIPTION
         "Check timeout in seconds"
+    REFERENCE "TODO"
     SYNTAX      Integer32 (0..1024)
 
-I2MaxCheckAttempts ::= TEXTUAL-CONVENTION
+I2AttemptTC ::= TEXTUAL-CONVENTION
     DISPLAY-HINT "d"
     STATUS      current
     DESCRIPTION
-        "Max check attempts"
-    SYNTAX      Integer32 (1..1024)
+        "Attempts, used in check, max attempt"
+    REFERENCE "TODO"
+    SYNTAX      Integer32 (0..1024)
 
 ---
---- Defines all fieldnames
+--- Defines all attributnames
 ---
 
-i2ObjectField OBJECT-IDENTITY
+i2ObjectAttribute OBJECT-IDENTITY
             STATUS current
-            DESCRIPTION "All object fields."
+            DESCRIPTION "All object attributs."
             ::= { icinga2 1 }
 
 --
@@ -171,11 +194,11 @@ icinga2Compliance OBJECT-IDENTITY
 --
 -- Generic variables
 --
-i2GenericField OBJECT-IDENTITY
+i2GenericAttribute OBJECT-IDENTITY
     STATUS      current
     DESCRIPTION
-        "Global object fields."
-    ::= { i2ObjectField 0 }
+        "Global object attributs."
+    ::= { i2ObjectAttribute 0 }
 
 --
 -- Represent a name
@@ -186,7 +209,7 @@ i2Name OBJECT-TYPE
     STATUS      current
     DESCRIPTION
         "Name of a service,host, etc."
-    ::= { i2GenericField 3 }
+    ::= { i2GenericAttribute 3 }
 
 --
 -- Display of a name
@@ -197,7 +220,7 @@ i2DisplayName OBJECT-TYPE
     STATUS      current
     DESCRIPTION
         "Display name"
-    ::= { i2GenericField 5 }
+    ::= { i2GenericAttribute 5 }
 
 --
 -- Note
@@ -208,7 +231,7 @@ i2Notes OBJECT-TYPE
     STATUS      current
     DESCRIPTION
         "Notes in an Object"
-    ::= { i2GenericField 6 }
+    ::= { i2GenericAttribute 6 }
 
 --
 -- URL for a note
@@ -219,7 +242,7 @@ i2NotesUrl OBJECT-TYPE
     STATUS      current
     DESCRIPTION
         "URL to a notes"
-    ::= { i2GenericField 7 }
+    ::= { i2GenericAttribute 7 }
 
 i2Output OBJECT-TYPE
     SYNTAX      I2StringTC
@@ -227,7 +250,7 @@ i2Output OBJECT-TYPE
     STATUS      current
     DESCRIPTION
         "An output from a check"
-    ::= { i2GenericField 8 }
+    ::= { i2GenericAttribute 8 }
 
 i2CheckCommand OBJECT-TYPE
     SYNTAX I2CheckCommandTC
@@ -235,15 +258,15 @@ i2CheckCommand OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Check command name"
-    ::= { i2GenericField 9 }
+    ::= { i2GenericAttribute 9 }
 
 i2CheckAttempt OBJECT-TYPE
-    SYNTAX I2TimeStamp
+    SYNTAX I2AttemptTC
     MAX-ACCESS read-only
     STATUS current
     DESCRIPTION
         "Check heck timestamp"
-    ::= { i2GenericField 10 }
+    ::= { i2GenericAttribute 10 }
 
 i2CheckInterval OBJECT-TYPE
     SYNTAX I2CheckIntervalTC
@@ -251,7 +274,7 @@ i2CheckInterval OBJECT-TYPE
     STATUS current
     DESCRIPTION
 	"Check interval"
-    ::= { i2GenericField 100 }
+    ::= { i2GenericAttribute 100 }
 
 i2CheckPeriod OBJECT-TYPE
     SYNTAX I2StringTC
@@ -259,7 +282,7 @@ i2CheckPeriod OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Name of the period."
-    ::= { i2GenericField 101 }
+    ::= { i2GenericAttribute 101 }
 
 
 i2EnableActiveChecks  OBJECT-TYPE
@@ -268,7 +291,7 @@ i2EnableActiveChecks  OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Enable active checks?"
-    ::= { i2GenericField 11 }
+    ::= { i2GenericAttribute 11 }
 
 i2EnableEventHandler  OBJECT-TYPE
     SYNTAX I2BooleanTC
@@ -276,7 +299,7 @@ i2EnableEventHandler  OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Is event handler enabled?"
-    ::= { i2GenericField 12 }
+    ::= { i2GenericAttribute 12 }
 
 i2EnableFlapping  OBJECT-TYPE
     SYNTAX I2BooleanTC
@@ -284,7 +307,7 @@ i2EnableFlapping  OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Is flapping detection enabled?"
-    ::= { i2GenericField 13 }
+    ::= { i2GenericAttribute 13 }
 
 i2EnableNotfications  OBJECT-TYPE
     SYNTAX I2BooleanTC
@@ -292,7 +315,7 @@ i2EnableNotfications  OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Is notification enabled?"
-    ::= { i2GenericField 14 }
+    ::= { i2GenericAttribute 14 }
 
 i2EnablePassiveCheck  OBJECT-TYPE
     SYNTAX I2BooleanTC
@@ -300,7 +323,7 @@ i2EnablePassiveCheck  OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Are passive checks allowed?"
-    ::= { i2GenericField 15 }
+    ::= { i2GenericAttribute 15 }
 
 i2EnablePerfdata  OBJECT-TYPE
     SYNTAX I2BooleanTC
@@ -308,7 +331,7 @@ i2EnablePerfdata  OBJECT-TYPE
     STATUS current
     DESCRIPTION
         "Is writing of perfdata active?"
-    ::= { i2GenericField 16 }
+    ::= { i2GenericAttribute 16 }
 
 i2Active OBJECT-TYPE
     SYNTAX I2BooleanTC
@@ -316,7 +339,7 @@ i2Active OBJECT-TYPE
     STATUS current
     DESCRIPTION
 	"Is active? Used e.g. zone, endpoint"
-    ::= { i2GenericField 17 }
+    ::= { i2GenericAttribute 17 }
 
 i2Global OBJECT-TYPE
     SYNTAX I2BooleanTC
@@ -324,7 +347,7 @@ i2Global OBJECT-TYPE
     STATUS current
     DESCRIPTION
     "Is global? Used e.g. zone, endpoint"
-    ::= { i2GenericField 18 }
+    ::= { i2GenericAttribute 18 }
 
 i2Address OBJECT-TYPE
     SYNTAX I2AddressTC
@@ -332,7 +355,7 @@ i2Address OBJECT-TYPE
     STATUS current
     DESCRIPTION
     "Address in that resolves to an IPv4"
-    ::= { i2GenericField 19 }
+    ::= { i2GenericAttribute 19 }
 
 i2Address6 OBJECT-TYPE
     SYNTAX I2Address6TC
@@ -340,7 +363,7 @@ i2Address6 OBJECT-TYPE
     STATUS current
     DESCRIPTION
     "Address in that resolves to an IPv6"
-    ::= { i2GenericField 20 }
+    ::= { i2GenericAttribute 20 }
 
 
 i2LastCheck OBJECT-TYPE
@@ -349,52 +372,52 @@ i2LastCheck OBJECT-TYPE
     STATUS current
     DESCRIPTION
 	"Last check timestamp"
-    ::= { i2GenericField 99 }
+    ::= { i2GenericAttribute 99 }
 
 
 
-i2HostField OBJECT-IDENTITY
+i2HostAttribute OBJECT-IDENTITY
     STATUS      current
     DESCRIPTION
-        "Host fields"
-    ::= { i2ObjectField 1 }
+        "Host attributs"
+    ::= { i2ObjectAttribute 1 }
 
 i2HostName OBJECT-TYPE
     SYNTAX I2HostNameTC
     MAX-ACCESS read-write
            STATUS current
            DESCRIPTION "Hostname"
-           ::= { i2HostField 1 }
+           ::= { i2HostAttribute 1 }
 
 --
--- Define the the variables in the service
+-- Define the the attribute in the service
 --
-i2ServiceField OBJECT-IDENTITY
+i2ServiceAttribute OBJECT-IDENTITY
             STATUS current
-            DESCRIPTION "Service fields"
-            ::= { i2ObjectField 2 }
+            DESCRIPTION "Service attributs"
+            ::= { i2ObjectAttribute 2 }
 
 i2ServiceName OBJECT-TYPE
 	    SYNTAX I2StringTC
 	    MAX-ACCESS read-write
 	    STATUS current
 	    DESCRIPTION "Name of the service"
-	    ::= { i2ServiceField 1 }
+	    ::= { i2ServiceAttribute 1 }
 
 --
 -- This is the user info, used as contact
 --
-i2UserField OBJECT-IDENTITY
+i2UserAttribute OBJECT-IDENTITY
             STATUS current
             DESCRIPTION "Contact"
-            ::= { i2ObjectField 10 }
+            ::= { i2ObjectAttribute 10 }
 
 i2UserPager	OBJECT-TYPE
     SYNTAX I2StringTC
     MAX-ACCESS read-write
     STATUS current
     DESCRIPTION "Pager"
-    ::= { i2UserField 1 }
+    ::= { i2UserAttribute 1 }
 
 i2ObjectType OBJECT-TYPE
             SYNTAX INTEGER {
@@ -419,7 +442,7 @@ i2ObjectType OBJECT-TYPE
             STATUS current
             DESCRIPTION "Objecttype, id mapping type"
             -- https://github.com/Icinga/icinga2/blob/master/lib/db_ido/dbobject.hpp
-            ::= { i2GenericField 1 }
+            ::= { i2GenericAttribute 1 }
 
 i2StateType OBJECT-TYPE
             SYNTAX INTEGER {
@@ -430,7 +453,7 @@ i2StateType OBJECT-TYPE
             STATUS current
             DESCRIPTION "State type, could be soft or hard."
             -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/checkresult.ti
-            ::= { i2GenericField 4 }
+            ::= { i2GenericAttribute 4 }
 
 i2StateHost OBJECT-TYPE
              SYNTAX INTEGER {
@@ -441,7 +464,7 @@ i2StateHost OBJECT-TYPE
              STATUS current
              DESCRIPTION "Host state"
              -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
-             ::= { i2HostField 4 }
+             ::= { i2HostAttribute 4 }
 
 i2StateService OBJECT-TYPE
              SYNTAX INTEGER {
@@ -455,7 +478,7 @@ i2StateService OBJECT-TYPE
             STATUS current
             DESCRIPTION "Service state"
             -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
-            ::= { i2ServiceField 2 }
+            ::= { i2ServiceAttribute 2 }
 
 i2NotificationType OBJECT-TYPE
            SYNTAX INTEGER {
@@ -474,7 +497,7 @@ i2NotificationType OBJECT-TYPE
            STATUS current
            DESCRIPTION "Notfication type"
            -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
-           ::= { i2ObjectField 6 }
+           ::= { i2ObjectAttribute 6 }
 
 i2NotificationGeneric NOTIFICATION-TYPE
       OBJECTS {
@@ -538,7 +561,7 @@ i2ComplianceTypeGroup OBJECT-GROUP
            DESCRIPTION "Group of object for compliance"
            ::= { icinga2Compliance 2 }
 
-i2ComplianceFieldGroup OBJECT-GROUP
+i2ComplianceAttributeGroup OBJECT-GROUP
     OBJECTS {
     i2Name,
     i2DisplayName,
@@ -628,8 +651,8 @@ i2Compliance MODULE-COMPLIANCE
              GROUP i2ComplianceStateGroup
              DESCRIPTION "States"
 
-	     GROUP i2ComplianceFieldGroup
-	     DESCRIPTION "Field"
+	     GROUP i2ComplianceAttributeGroup
+	     DESCRIPTION "Attribute"
 
 	     GROUP i2ComplinanceObjectGroup
 	     DESCRIPTION "Objects"
