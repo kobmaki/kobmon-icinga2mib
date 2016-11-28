@@ -3,15 +3,16 @@
 -- Infos: Definition of the ICINGA2-MIB below the koboldmaki root mib (1.3.6.1.4.1.12483)
 --
 
-KOBOLDMAKI-ICINGA2-MIB DEFINITIONS ::= BEGIN
+ICINGA2-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
+    -- 1.3.6.1.4.1.12483.999
     koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB
     MODULE-IDENTITY FROM SNMPv2-SMI
     OBJECT-IDENTITY FROM SNMPv2-SMI
     OBJECT-TYPE FROM SNMPv2-SMI
     Integer32 FROM SNMPv2-SMI
---    enterprises FROM SNMPv2-SMI
+    enterprises FROM SNMPv2-SMI
     NOTIFICATION-TYPE FROM SNMPv2-SMI
     NOTIFICATION-GROUP FROM SNMPv2-CONF
     MODULE-COMPLIANCE FROM SNMPv2-CONF
@@ -33,6 +34,10 @@ icinga2 MODULE-IDENTITY
     REVISION    "201512250001Z"
     DESCRIPTION
         "initial version"
+    --  1.3.6.1.4.1.12483.999.2
+    --  enterprises.KOBOLDMAKI-ROOT-MIB.OSS
+    --
+    -- ::= { 1.3.6.1.4.1.12483.999.2 }
     ::= { koboldmaki-oss 2 }
 
 
@@ -149,7 +154,7 @@ I2AttemptTC ::= TEXTUAL-CONVENTION
 --- Defines all attributnames
 ---
 
-i2ObjectAttribute OBJECT-IDENTITY
+i2ObjectAttributes OBJECT-IDENTITY
             STATUS current
             DESCRIPTION "All object attributs."
             ::= { icinga2 1 }
@@ -198,7 +203,7 @@ i2GenericAttribute OBJECT-IDENTITY
     STATUS      current
     DESCRIPTION
         "Global object attributs."
-    ::= { i2ObjectAttribute 0 }
+    ::= { i2ObjectAttributes 0 }
 
 --
 -- Represent a name
@@ -362,9 +367,25 @@ i2Address6 OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS current
     DESCRIPTION
-    "Address in that resolves to an IPv6"
+	"Address in that resolves to an IPv6"
     ::= { i2GenericAttribute 20 }
 
+i2Parent OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Name of the parent"
+    ::= { i2GenericAttribute 21 }
+
+i2HaMode OBJECT-TYPE
+    -- TODO TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Ha Mode"
+    ::= { i2GenericAttribute 22 }
 
 i2LastCheck OBJECT-TYPE
     SYNTAX TimeStamp
@@ -376,48 +397,82 @@ i2LastCheck OBJECT-TYPE
 
 
 
-i2HostAttribute OBJECT-IDENTITY
+i2HostAttributes OBJECT-IDENTITY
     STATUS      current
     DESCRIPTION
         "Host attributs"
-    ::= { i2ObjectAttribute 1 }
+    ::= { i2ObjectAttributes 1 }
 
 i2HostName OBJECT-TYPE
     SYNTAX I2HostNameTC
     MAX-ACCESS read-write
            STATUS current
            DESCRIPTION "Hostname"
-           ::= { i2HostAttribute 1 }
+           ::= { i2HostAttributes 1 }
 
 --
 -- Define the the attribute in the service
 --
-i2ServiceAttribute OBJECT-IDENTITY
+i2ServiceAttributes OBJECT-IDENTITY
             STATUS current
             DESCRIPTION "Service attributs"
-            ::= { i2ObjectAttribute 2 }
+            ::= { i2ObjectAttributes 2 }
 
 i2ServiceName OBJECT-TYPE
 	    SYNTAX I2StringTC
 	    MAX-ACCESS read-write
 	    STATUS current
 	    DESCRIPTION "Name of the service"
-	    ::= { i2ServiceAttribute 1 }
+	    ::= { i2ServiceAttributes 1 }
 
 --
 -- This is the user info, used as contact
 --
-i2UserAttribute OBJECT-IDENTITY
+i2UserAttributes OBJECT-IDENTITY
             STATUS current
             DESCRIPTION "Contact"
-            ::= { i2ObjectAttribute 10 }
+            ::= { i2ObjectAttributes 10 }
 
 i2UserPager	OBJECT-TYPE
     SYNTAX I2StringTC
     MAX-ACCESS read-write
     STATUS current
     DESCRIPTION "Pager"
-    ::= { i2UserAttribute 1 }
+    ::= { i2UserAttributes 1 }
+
+--
+-- This is attributes for the endpoint
+--
+
+i2EndpointAttributes OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION
+	"Endpoint attributes"
+    ::= { i2ObjectAttributes 13 }
+
+i2EndpointName OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+	"Endpoint name"
+    ::= { i2EndpointAttributes 1 }
+
+--
+-- This is for the zone
+--
+i2ZoneAttributes OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION
+	"Zone attributes"
+    ::= { i2ObjectAttributes 14 }
+
+i2ZoneName OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION "Zone name"
+    ::= { i2ZoneAttributes 1 }
 
 i2ObjectType OBJECT-TYPE
             SYNTAX INTEGER {
@@ -464,7 +519,7 @@ i2StateHost OBJECT-TYPE
              STATUS current
              DESCRIPTION "Host state"
              -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
-             ::= { i2HostAttribute 4 }
+             ::= { i2HostAttributes 4 }
 
 i2StateService OBJECT-TYPE
              SYNTAX INTEGER {
@@ -478,7 +533,7 @@ i2StateService OBJECT-TYPE
             STATUS current
             DESCRIPTION "Service state"
             -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
-            ::= { i2ServiceAttribute 2 }
+            ::= { i2ServiceAttributes 2 }
 
 i2NotificationType OBJECT-TYPE
            SYNTAX INTEGER {
@@ -497,7 +552,7 @@ i2NotificationType OBJECT-TYPE
            STATUS current
            DESCRIPTION "Notfication type"
            -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
-           ::= { i2ObjectAttribute 6 }
+           ::= { i2ObjectAttributes 6 }
 
 i2NotificationGeneric NOTIFICATION-TYPE
       OBJECTS {
@@ -510,7 +565,7 @@ i2NotificationGeneric NOTIFICATION-TYPE
       --#TYPE "GENERICTRAP"
       --#SUMMARY "Object %s, reason %s"
       --#ARGUMENTS
-      ::= { icinga2Notifications 1 }
+      ::= { icinga2Notifications 9999 }
 
 --
 -- Hosttrap
@@ -533,7 +588,7 @@ i2NotificationHost NOTIFICATION-TYPE
            --#TYPE         "HOSTTRAP"
            --#SUMMARY      "Host %s is in state %s"
            --#ARGUMENTS
-           ::= { icinga2Notifications 2 }
+           ::= { icinga2Notifications 1 }
 
 i2NotificationService NOTIFICATION-TYPE
     OBJECTS {
@@ -549,7 +604,20 @@ i2NotificationService NOTIFICATION-TYPE
     --#TYPE     "SERVICETRAP"
     --#SUMMARY  "Service %s is in state %s"
     --#ARGUMENTS
-    ::= { icinga2Notifications 3 }
+    ::= { icinga2Notifications 2 }
+
+
+i2NotificationEndpoint NOTIFICATION-TYPE
+    OBJECTS {
+        i2NotificationType,
+        i2ObjectType,
+	i2EndpointName
+	}
+    STATUS current
+    DESCRIPTION "Endpoint Trap"
+    --#TYPE "ENDPOINTTRAP"
+    --#SUMMARY "Endpoint %s is in state %s"
+    ::= { icinga2Notifications 13 }
 
 i2ComplianceTypeGroup OBJECT-GROUP
            OBJECTS {
@@ -621,12 +689,9 @@ i2ComplianceNotificationGroup NOTIFICATION-GROUP
            DESCRIPTION "All traps group for compliance."
            ::= { icinga2Compliance 6 }
 
--- i2Host OBJECT-TYPE
---    SYNTAX I2HostEntry
---    MAX-ACCESS read-only
---    STATUS current
---    DESCRIPTION "Defines a Host entry"
---    ::= { icinga2Groups 99 }
+--
+-- Define a Host entry
+--
 
 I2HostEntry ::= SEQUENCE {
     i2HostName I2HostNameTC,
@@ -635,6 +700,23 @@ I2HostEntry ::= SEQUENCE {
     i2Address6 I2Address6TC,
     i2Notes I2StringTC
 --    i2MaxCheckAttempts I2MaxCheckAttempts
+}
+
+--
+-- This is an Endpoint entry
+--
+I2EndpointEntry ::= SEQUENCE {
+    i2EndpointName I2StringTC,
+    i2Global I2BooleanTC
+--    i2ZoneName	I2StringTC,
+--    i2HaMode	I2BooleanTC
+}
+
+I2ZoneEntry ::= SEQUENCE {
+    i2ZoneName I2StringTC,
+--    i2Active I2BooleanTC,
+    i2Parent I2StringTC,
+    i2Global I2BooleanTC
 }
 
 --
