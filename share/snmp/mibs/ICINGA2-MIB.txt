@@ -6,8 +6,8 @@
 ICINGA2-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
-    -- 1.3.6.1.4.1.12483.999
-    koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB
+    -- 1.3.6.1.4.1.12483.999 defines the
+    --    koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB
     MODULE-IDENTITY FROM SNMPv2-SMI
     OBJECT-IDENTITY FROM SNMPv2-SMI
     OBJECT-TYPE FROM SNMPv2-SMI
@@ -34,11 +34,15 @@ icinga2 MODULE-IDENTITY
     REVISION    "201512250001Z"
     DESCRIPTION
         "initial version"
+
     --  1.3.6.1.4.1.12483.999.2
     --  enterprises.KOBOLDMAKI-ROOT-MIB.OSS
     --
-    -- ::= { 1.3.6.1.4.1.12483.999.2 }
-    ::= { koboldmaki-oss 2 }
+    -- snmptranslate -On ICINGA2-MIB::icinga2
+    -- gives the .1.3.6.1.4.1.12483.999.2
+    --
+    -- ::= { koboldmaki-oss 2 }
+    ::= { enterprises 12483 999 2 }
 
 
 --
@@ -388,7 +392,7 @@ i2HaMode OBJECT-TYPE
     ::= { i2GenericAttribute 22 }
 
 i2LastCheck OBJECT-TYPE
-    SYNTAX TimeStamp
+    SYNTAX I2TimeStampTC
     MAX-ACCESS read-only
     STATUS current
     DESCRIPTION
@@ -653,7 +657,11 @@ i2ComplianceAttributeGroup OBJECT-GROUP
     i2EnablePassiveCheck,
     i2EnablePerfdata,
     i2Active,
-    i2Global
+    i2Global,
+    i2Parent,
+    i2EndpointName,
+    i2ZoneName,
+    i2HaMode
     }
     STATUS current
     DESCRIPTION "Variable of objects"
@@ -709,7 +717,7 @@ I2EndpointEntry ::= SEQUENCE {
     i2EndpointName I2StringTC,
     i2Global I2BooleanTC
 --    i2ZoneName	I2StringTC,
---    i2HaMode	I2BooleanTC
+--    i2HaMode	I2HaModeTC
 }
 
 I2ZoneEntry ::= SEQUENCE {

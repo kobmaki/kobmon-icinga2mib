@@ -5,7 +5,7 @@
 
 <smi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:noNamespaceSchemaLocation="http://www.ibr.cs.tu-bs.de/projects/nmrg/smi.xsd">
-  <module name="KOBOLDMAKI-ICINGA2-MIB" language="SMIv2">
+  <module name="ICINGA2-MIB" language="SMIv2">
     <organization>  
         Uwe Ebel, koboldmaki
     </organization>
@@ -17,7 +17,7 @@
     </description>
     <revision date="2016-10-20 23:59">
       <description>
-          WIP, add base fields.
+          WIP, add base attributs.
       </description>
     </revision>
     <revision date="2015-12-25 00:01">
@@ -33,104 +33,164 @@
     <import module="SNMPv2-SMI" name="OBJECT-IDENTITY"/>
     <import module="SNMPv2-SMI" name="OBJECT-TYPE"/>
     <import module="SNMPv2-SMI" name="Integer32"/>
+    <import module="SNMPv2-SMI" name="enterprises"/>
     <import module="SNMPv2-SMI" name="NOTIFICATION-TYPE"/>
     <import module="SNMPv2-CONF" name="NOTIFICATION-GROUP"/>
     <import module="SNMPv2-CONF" name="MODULE-COMPLIANCE"/>
     <import module="SNMPv2-CONF" name="OBJECT-GROUP"/>
     <import module="SNMPv2-TC" name="TEXTUAL-CONVENTION"/>
-    <import module="KOBOLDMAKI-ROOT-MIB" name="koboldmaki-oss"/>
+    <import module="SNMPv2-TC" name="TimeStamp"/>
   </imports>
 
   <typedefs>
-    <typedef name="I2Boolean" basetype="Enumeration" status="current">
+    <typedef name="I2BooleanTC" basetype="Enumeration" status="current">
       <namednumber name="false" number="0"/>
       <namednumber name="true" number="1"/>
       <description>
           Represent a false/true value.
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2String" basetype="OctetString" status="current">
+    <typedef name="I2StringTC" basetype="OctetString" status="current">
       <range min="0" max="127"/>
+      <format>127a</format>
       <description>
           Respresent a string.
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2Timestamp" basetype="OctetString" status="current">
+    <typedef name="I2TimeStampTC" basetype="OctetString" status="current">
+      <format>30a</format>
       <description>
           Represent a unix timestamp
       </description>
+      <reference>
+          https://github.com/Icinga/icinga2/blob/master/lib/base/datetime.ti
+      </reference>
     </typedef>
-    <typedef name="I2Name" basetype="OctetString" status="current">
+    <typedef name="I2NameTC" basetype="OctetString" status="current">
       <range min="0" max="127"/>
+      <format>127a</format>
       <description>
           Something that is a name
       </description>
+      <reference>
+          https://github.com/Icinga/icinga2/blob/master/lib/base/configobject.ti
+      </reference>
     </typedef>
-    <typedef name="I2DisplayName" basetype="OctetString" status="current">
+    <typedef name="I2DisplayNameTC" basetype="OctetString" status="current">
       <range min="0" max="127"/>
+      <format>127a</format>
       <description>
           Something that is the display name
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2HostName" basetype="OctetString" status="current">
+    <typedef name="I2HaModeTC" basetype="Enumeration" status="current">
+      <namednumber name="haRunOnce" number="0"/>
+      <namednumber name="haRunEverywhere" number="1"/>
+      <description>
+          What HA Mode is used.
+      </description>
+      <reference>
+          https://github.com/Icinga/icinga2/blob/master/lib/base/configobject.ti
+      </reference>
+    </typedef>
+    <typedef name="I2HostNameTC" basetype="OctetString" status="current">
       <range min="0" max="127"/>
+      <format>127a</format>
       <description>
           Something that is the hostname (host_name)
       </description>
+      <reference>
+          https://github.com/Icinga/icinga2/blob/master/lib/icinga/host.ti
+      </reference>
     </typedef>
-    <typedef name="I2Address" basetype="OctetString" status="current">
+    <typedef name="I2AddressTC" basetype="OctetString" status="current">
       <range min="0" max="127"/>
+      <format>127a</format>
       <description>
           Something that is the address of a host.
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2Address6" basetype="OctetString" status="current">
+    <typedef name="I2Address6TC" basetype="OctetString" status="current">
       <range min="0" max="127"/>
+      <format>127a</format>
       <description>
           Something that is the address (address6) of a host.
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2CheckCommand" basetype="OctetString" status="current">
+    <typedef name="I2CheckCommandTC" basetype="OctetString" status="current">
       <range min="0" max="127"/>
+      <format>127a</format>
       <description>
           Something that is check command name (check_command).
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2CheckInterval" basetype="Integer32" status="current">
+    <typedef name="I2CheckIntervalTC" basetype="Integer32" status="current">
+      <range min="0" max="999999"/>
+      <format>d</format>
       <description>
           Check interval in seconds
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2CheckTimeout" basetype="Integer32" status="current">
+    <typedef name="I2CheckTimeoutTC" basetype="Integer32" status="current">
       <range min="0" max="1024"/>
+      <format>d</format>
       <description>
           Check timeout in seconds
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
-    <typedef name="I2MaxCheckAttempts" basetype="Integer32" status="current">
-      <range min="0" max="10"/>
+    <typedef name="I2AttemptTC" basetype="Integer32" status="current">
+      <range min="0" max="1024"/>
+      <format>d</format>
       <description>
-          Max check attempts
+          Attempts, used in check, max attempt
       </description>
+      <reference>
+          TODO
+      </reference>
     </typedef>
   </typedefs>
 
   <nodes>
     <node name="icinga2" oid="1.3.6.1.4.1.12483.999.2" status="current">
     </node>
-    <node name="i2ObjectField" oid="1.3.6.1.4.1.12483.999.2.1" status="current">
+    <node name="i2ObjectAttributes" oid="1.3.6.1.4.1.12483.999.2.1" status="current">
       <description>
-          All object fields.
+          All object attributs.
       </description>
     </node>
-    <node name="i2Field" oid="1.3.6.1.4.1.12483.999.2.1.0" status="current">
+    <node name="i2GenericAttribute" oid="1.3.6.1.4.1.12483.999.2.1.0" status="current">
       <description>
-          Global object fields.
+          Global object attributs.
       </description>
     </node>
     <scalar name="i2ObjectType" oid="1.3.6.1.4.1.12483.999.2.1.0.1" status="current">
       <syntax>
         <typedef basetype="Enumeration">
+          <namednumber name="object" number="0"/>
           <namednumber name="host" number="1"/>
           <namednumber name="service" number="2"/>
           <namednumber name="hostgroup" number="3"/>
@@ -152,16 +212,16 @@
           Objecttype, id mapping type
       </description>
     </scalar>
-    <scalar name="i2DisplayName" oid="1.3.6.1.4.1.12483.999.2.1.0.2" status="current">
+    <scalar name="i2Name" oid="1.3.6.1.4.1.12483.999.2.1.0.3" status="current">
       <syntax>
-        <type module="KOBOLDMAKI-ICINGA2-MIB" name="I2String"/>
+        <type module="ICINGA2-MIB" name="I2NameTC"/>
       </syntax>
       <access>readwrite</access>
       <description>
-          Display name
+          Name of a service,host, etc.
       </description>
     </scalar>
-    <scalar name="i2StateType" oid="1.3.6.1.4.1.12483.999.2.1.0.3" status="current">
+    <scalar name="i2StateType" oid="1.3.6.1.4.1.12483.999.2.1.0.4" status="current">
       <syntax>
         <typedef basetype="Enumeration">
           <namednumber name="stateTypeSoft" number="0"/>
@@ -173,14 +233,203 @@
           State type, could be soft or hard.
       </description>
     </scalar>
-    <node name="i2HostField" oid="1.3.6.1.4.1.12483.999.2.1.1" status="current">
+    <scalar name="i2DisplayName" oid="1.3.6.1.4.1.12483.999.2.1.0.5" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2DisplayNameTC"/>
+      </syntax>
+      <access>readwrite</access>
       <description>
-          Host fields
+          Display name
+      </description>
+    </scalar>
+    <scalar name="i2Notes" oid="1.3.6.1.4.1.12483.999.2.1.0.6" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Notes in an Object
+      </description>
+    </scalar>
+    <scalar name="i2NotesUrl" oid="1.3.6.1.4.1.12483.999.2.1.0.7" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          URL to a notes
+      </description>
+    </scalar>
+    <scalar name="i2Output" oid="1.3.6.1.4.1.12483.999.2.1.0.8" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          An output from a check
+      </description>
+    </scalar>
+    <scalar name="i2CheckCommand" oid="1.3.6.1.4.1.12483.999.2.1.0.9" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2CheckCommandTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Check command name
+      </description>
+    </scalar>
+    <scalar name="i2CheckAttempt" oid="1.3.6.1.4.1.12483.999.2.1.0.10" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2AttemptTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Check heck timestamp
+      </description>
+    </scalar>
+    <scalar name="i2EnableActiveChecks" oid="1.3.6.1.4.1.12483.999.2.1.0.11" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Enable active checks?
+      </description>
+    </scalar>
+    <scalar name="i2EnableEventHandler" oid="1.3.6.1.4.1.12483.999.2.1.0.12" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Is event handler enabled?
+      </description>
+    </scalar>
+    <scalar name="i2EnableFlapping" oid="1.3.6.1.4.1.12483.999.2.1.0.13" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Is flapping detection enabled?
+      </description>
+    </scalar>
+    <scalar name="i2EnableNotfications" oid="1.3.6.1.4.1.12483.999.2.1.0.14" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Is notification enabled?
+      </description>
+    </scalar>
+    <scalar name="i2EnablePassiveCheck" oid="1.3.6.1.4.1.12483.999.2.1.0.15" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Are passive checks allowed?
+      </description>
+    </scalar>
+    <scalar name="i2EnablePerfdata" oid="1.3.6.1.4.1.12483.999.2.1.0.16" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Is writing of perfdata active?
+      </description>
+    </scalar>
+    <scalar name="i2Active" oid="1.3.6.1.4.1.12483.999.2.1.0.17" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Is active? Used e.g. zone, endpoint
+      </description>
+    </scalar>
+    <scalar name="i2Global" oid="1.3.6.1.4.1.12483.999.2.1.0.18" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Is global? Used e.g. zone, endpoint
+      </description>
+    </scalar>
+    <scalar name="i2Address" oid="1.3.6.1.4.1.12483.999.2.1.0.19" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2AddressTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Address in that resolves to an IPv4
+      </description>
+    </scalar>
+    <scalar name="i2Address6" oid="1.3.6.1.4.1.12483.999.2.1.0.20" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2Address6TC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Address in that resolves to an IPv6
+      </description>
+    </scalar>
+    <scalar name="i2Parent" oid="1.3.6.1.4.1.12483.999.2.1.0.21" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Name of the parent
+      </description>
+    </scalar>
+    <scalar name="i2HaMode" oid="1.3.6.1.4.1.12483.999.2.1.0.22" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2BooleanTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Ha Mode
+      </description>
+    </scalar>
+    <scalar name="i2LastCheck" oid="1.3.6.1.4.1.12483.999.2.1.0.99" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2TimeStampTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Last check timestamp
+      </description>
+    </scalar>
+    <scalar name="i2CheckInterval" oid="1.3.6.1.4.1.12483.999.2.1.0.100" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2CheckIntervalTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Check interval
+      </description>
+    </scalar>
+    <scalar name="i2CheckPeriod" oid="1.3.6.1.4.1.12483.999.2.1.0.101" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readonly</access>
+      <description>
+          Name of the period.
+      </description>
+    </scalar>
+    <node name="i2HostAttributes" oid="1.3.6.1.4.1.12483.999.2.1.1" status="current">
+      <description>
+          Host attributs
       </description>
     </node>
     <scalar name="i2HostName" oid="1.3.6.1.4.1.12483.999.2.1.1.1" status="current">
       <syntax>
-        <type module="KOBOLDMAKI-ICINGA2-MIB" name="I2HostName"/>
+        <type module="ICINGA2-MIB" name="I2HostNameTC"/>
       </syntax>
       <access>readwrite</access>
       <description>
@@ -199,11 +448,20 @@
           Host state
       </description>
     </scalar>
-    <node name="i2ServiceField" oid="1.3.6.1.4.1.12483.999.2.1.2" status="current">
+    <node name="i2ServiceAttributes" oid="1.3.6.1.4.1.12483.999.2.1.2" status="current">
       <description>
-          Service fields
+          Service attributs
       </description>
     </node>
+    <scalar name="i2ServiceName" oid="1.3.6.1.4.1.12483.999.2.1.2.1" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readwrite</access>
+      <description>
+          Name of the service
+      </description>
+    </scalar>
     <scalar name="i2StateService" oid="1.3.6.1.4.1.12483.999.2.1.2.2" status="current">
       <syntax>
         <typedef basetype="Enumeration">
@@ -221,40 +479,68 @@
     <scalar name="i2NotificationType" oid="1.3.6.1.4.1.12483.999.2.1.6" status="current">
       <syntax>
         <typedef basetype="Enumeration">
-          <namednumber name="downtimeStart" number="0"/>
-          <namednumber name="downtimeEnd" number="1"/>
-          <namednumber name="downtimeRemoved" number="2"/>
-          <namednumber name="custom" number="3"/>
-          <namednumber name="acknowledgement" number="4"/>
-          <namednumber name="problem" number="5"/>
-          <namednumber name="recovery" number="6"/>
-          <namednumber name="flappingStart" number="7"/>
-          <namednumber name="flappingEnd" number="8"/>
+          <namednumber name="undefined" number="0"/>
+          <namednumber name="downtimeStart" number="1"/>
+          <namednumber name="downtimeEnd" number="2"/>
+          <namednumber name="downtimeRemoved" number="3"/>
+          <namednumber name="custom" number="4"/>
+          <namednumber name="acknowledgement" number="5"/>
+          <namednumber name="problem" number="6"/>
+          <namednumber name="recovery" number="7"/>
+          <namednumber name="flappingStart" number="8"/>
+          <namednumber name="flappingEnd" number="9"/>
         </typedef>
       </syntax>
-      <access>noaccess</access>
+      <access>readwrite</access>
       <description>
           Notfication type
       </description>
     </scalar>
-    <node name="i2ContactField" oid="1.3.6.1.4.1.12483.999.2.1.10" status="current">
+    <node name="i2UserAttributes" oid="1.3.6.1.4.1.12483.999.2.1.10" status="current">
       <description>
           Contact
       </description>
     </node>
-    <node name="icinga2Type" oid="1.3.6.1.4.1.12483.999.2.2" status="current">
+    <scalar name="i2UserPager" oid="1.3.6.1.4.1.12483.999.2.1.10.1" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readwrite</access>
       <description>
-          All icinga type definitions like host, service, hostgroup, state  etc.
+          Pager
+      </description>
+    </scalar>
+    <node name="i2EndpointAttributes" oid="1.3.6.1.4.1.12483.999.2.1.13" status="current">
+      <description>
+          Endpoint attributes
       </description>
     </node>
+    <scalar name="i2EndpointName" oid="1.3.6.1.4.1.12483.999.2.1.13.1" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readwrite</access>
+      <description>
+          Endpoint name
+      </description>
+    </scalar>
+    <node name="i2ZoneAttributes" oid="1.3.6.1.4.1.12483.999.2.1.14" status="current">
+      <description>
+          Zone attributes
+      </description>
+    </node>
+    <scalar name="i2ZoneName" oid="1.3.6.1.4.1.12483.999.2.1.14.1" status="current">
+      <syntax>
+        <type module="ICINGA2-MIB" name="I2StringTC"/>
+      </syntax>
+      <access>readwrite</access>
+      <description>
+          Zone name
+      </description>
+    </scalar>
     <node name="icinga2Notifications" oid="1.3.6.1.4.1.12483.999.2.3" status="current">
       <description>
           Parent of all notifications like traps, informations etc.
-      </description>
-    </node>
-    <node name="icinga2Traps" oid="1.3.6.1.4.1.12483.999.2.4" status="current">
-      <description>
-          Trap type definitions
       </description>
     </node>
     <node name="icinga2Groups" oid="1.3.6.1.4.1.12483.999.2.5" status="current">
@@ -277,8 +563,11 @@
   <notifications>
     <notification name="i2NotificationHost" oid="1.3.6.1.4.1.12483.999.2.3.1" status="current">
       <objects>
-        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
-        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
+        <object module="ICINGA2-MIB" name="i2NotificationType"/>
+        <object module="ICINGA2-MIB" name="i2ObjectType"/>
+        <object module="ICINGA2-MIB" name="i2StateHost"/>
+        <object module="ICINGA2-MIB" name="i2HostName"/>
+        <object module="ICINGA2-MIB" name="i2DisplayName"/>
       </objects>
       <description>
           Host trap
@@ -286,53 +575,109 @@
     </notification>
     <notification name="i2NotificationService" oid="1.3.6.1.4.1.12483.999.2.3.2" status="current">
       <objects>
-        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
-        <object module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateService"/>
+        <object module="ICINGA2-MIB" name="i2NotificationType"/>
+        <object module="ICINGA2-MIB" name="i2ObjectType"/>
+        <object module="ICINGA2-MIB" name="i2StateService"/>
+        <object module="ICINGA2-MIB" name="i2ServiceName"/>
+        <object module="ICINGA2-MIB" name="i2DisplayName"/>
+        <object module="ICINGA2-MIB" name="i2HostName"/>
       </objects>
       <description>
           Service trap
       </description>
     </notification>
+    <notification name="i2NotificationEndpoint" oid="1.3.6.1.4.1.12483.999.2.3.13" status="current">
+      <objects>
+        <object module="ICINGA2-MIB" name="i2NotificationType"/>
+        <object module="ICINGA2-MIB" name="i2ObjectType"/>
+        <object module="ICINGA2-MIB" name="i2EndpointName"/>
+      </objects>
+      <description>
+          Endpoint Trap
+      </description>
+    </notification>
+    <notification name="i2NotificationGeneric" oid="1.3.6.1.4.1.12483.999.2.3.9999" status="current">
+      <objects>
+        <object module="ICINGA2-MIB" name="i2NotificationType"/>
+        <object module="ICINGA2-MIB" name="i2ObjectType"/>
+        <object module="ICINGA2-MIB" name="i2Name"/>
+      </objects>
+      <description>
+          Generic Icinga2 Notfication
+      </description>
+    </notification>
   </notifications>
 
   <groups>
-    <group name="i2ComplianceTypeGroup" oid="1.3.6.1.4.1.12483.999.2.5.1" status="current">
+    <group name="i2ComplianceTypeGroup" oid="1.3.6.1.4.1.12483.999.2.7.2" status="current">
       <members>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateType"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2DisplayName"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2HostName"/>
+        <member module="ICINGA2-MIB" name="i2ObjectType"/>
+        <member module="ICINGA2-MIB" name="i2StateType"/>
+        <member module="ICINGA2-MIB" name="i2NotificationType"/>
       </members>
       <description>
           Group of object for compliance
       </description>
     </group>
-    <group name="i2ComplianceStateGroup" oid="1.3.6.1.4.1.12483.999.2.5.2" status="current">
+    <group name="i2ComplianceAttributeGroup" oid="1.3.6.1.4.1.12483.999.2.7.3" status="current">
       <members>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2ObjectType"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateService"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
+        <member module="ICINGA2-MIB" name="i2Name"/>
+        <member module="ICINGA2-MIB" name="i2DisplayName"/>
+        <member module="ICINGA2-MIB" name="i2Address"/>
+        <member module="ICINGA2-MIB" name="i2Address6"/>
+        <member module="ICINGA2-MIB" name="i2HostName"/>
+        <member module="ICINGA2-MIB" name="i2UserPager"/>
+        <member module="ICINGA2-MIB" name="i2ServiceName"/>
+        <member module="ICINGA2-MIB" name="i2LastCheck"/>
+        <member module="ICINGA2-MIB" name="i2CheckAttempt"/>
+        <member module="ICINGA2-MIB" name="i2CheckInterval"/>
+        <member module="ICINGA2-MIB" name="i2CheckPeriod"/>
+        <member module="ICINGA2-MIB" name="i2CheckCommand"/>
+        <member module="ICINGA2-MIB" name="i2Output"/>
+        <member module="ICINGA2-MIB" name="i2Notes"/>
+        <member module="ICINGA2-MIB" name="i2NotesUrl"/>
+        <member module="ICINGA2-MIB" name="i2EnableActiveChecks"/>
+        <member module="ICINGA2-MIB" name="i2EnableEventHandler"/>
+        <member module="ICINGA2-MIB" name="i2EnableFlapping"/>
+        <member module="ICINGA2-MIB" name="i2EnableNotfications"/>
+        <member module="ICINGA2-MIB" name="i2EnablePassiveCheck"/>
+        <member module="ICINGA2-MIB" name="i2EnablePerfdata"/>
+        <member module="ICINGA2-MIB" name="i2Active"/>
+        <member module="ICINGA2-MIB" name="i2Global"/>
+        <member module="ICINGA2-MIB" name="i2Parent"/>
+        <member module="ICINGA2-MIB" name="i2EndpointName"/>
+        <member module="ICINGA2-MIB" name="i2ZoneName"/>
+        <member module="ICINGA2-MIB" name="i2HaMode"/>
+      </members>
+      <description>
+          Variable of objects
+      </description>
+    </group>
+    <group name="i2ComplianceStateGroup" oid="1.3.6.1.4.1.12483.999.2.7.4" status="current">
+      <members>
+        <member module="ICINGA2-MIB" name="i2StateService"/>
+        <member module="ICINGA2-MIB" name="i2StateHost"/>
       </members>
       <description>
           Group with state objects for compliance
       </description>
     </group>
-    <group name="i2ComplianceNotificationGroup" oid="1.3.6.1.4.1.12483.999.2.5.3" status="current">
+    <group name="i2ComplinanceObjectGroup" oid="1.3.6.1.4.1.12483.999.2.7.5" status="current">
       <members>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2NotificationHost"/>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2NotificationService"/>
+        <member module="ICINGA2-MIB" name="i2StateHost"/>
       </members>
       <description>
-          Trap group for compliance.
+          Objects like, Host, Service
       </description>
     </group>
-    <group name="i2Host" oid="1.3.6.1.4.1.12483.999.2.5.4" status="current">
+    <group name="i2ComplianceNotificationGroup" oid="1.3.6.1.4.1.12483.999.2.7.6" status="current">
       <members>
-        <member module="KOBOLDMAKI-ICINGA2-MIB" name="i2StateHost"/>
+        <member module="ICINGA2-MIB" name="i2NotificationGeneric"/>
+        <member module="ICINGA2-MIB" name="i2NotificationHost"/>
+        <member module="ICINGA2-MIB" name="i2NotificationService"/>
       </members>
       <description>
-          Defines a Host entry
+          All traps group for compliance.
       </description>
     </group>
   </groups>
@@ -343,17 +688,27 @@
           Module desciption
       </description>
       <requires>
-        <option module="KOBOLDMAKI-ICINGA2-MIB" name="i2ComplianceTypeGroup">
+        <option module="ICINGA2-MIB" name="i2ComplianceTypeGroup">
+          <description>
+              Types
+          </description>
+        </option>
+        <option module="ICINGA2-MIB" name="i2ComplianceStateGroup">
+          <description>
+              States
+          </description>
+        </option>
+        <option module="ICINGA2-MIB" name="i2ComplianceAttributeGroup">
+          <description>
+              Attribute
+          </description>
+        </option>
+        <option module="ICINGA2-MIB" name="i2ComplinanceObjectGroup">
           <description>
               Objects
           </description>
         </option>
-        <option module="KOBOLDMAKI-ICINGA2-MIB" name="i2ComplianceStateGroup">
-          <description>
-              Object Type
-          </description>
-        </option>
-        <option module="KOBOLDMAKI-ICINGA2-MIB" name="i2ComplianceNotificationGroup">
+        <option module="ICINGA2-MIB" name="i2ComplianceNotificationGroup">
           <description>
               Traps
           </description>
