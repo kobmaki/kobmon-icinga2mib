@@ -1,0 +1,718 @@
+--
+-- Author: Uwe Ebel ( kobmaki @ aol . com )
+-- Infos: Definition of the ICINGA-ICINGA2-MIB below the koboldmaki root mib (1.3.6.1.4.1.12483)
+--
+
+ICINGA-ICINGA2-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    -- 1.3.6.1.4.1.12483.999 defines the
+    --    koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB
+
+    MODULE-IDENTITY FROM SNMPv2-SMI
+    OBJECT-IDENTITY FROM SNMPv2-SMI
+    OBJECT-TYPE FROM SNMPv2-SMI
+    -- Integer32 FROM SNMPv2-SMI
+    -- enterprises FROM SNMPv2-SMI
+    icinga FROM ICINGA-ROOT-MIB
+    I2Address6TC FROM ICINGA-TC-MIB
+    I2AddressTC FROM ICINGA-TC-MIB
+    I2AttemptTC FROM ICINGA-TC-MIB
+    I2BooleanTC FROM ICINGA-TC-MIB
+    I2CheckCommandTC FROM ICINGA-TC-MIB
+    I2CheckIntervalTC FROM ICINGA-TC-MIB
+    -- I2CheckTimeoutTC FROM ICINGA-TC-MIB
+    I2DisplayNameTC FROM ICINGA-TC-MIB
+    -- I2HaModeTC FROM ICINGA-TC-MIB
+    I2HostNameTC FROM ICINGA-TC-MIB
+    I2NameTC FROM ICINGA-TC-MIB
+    I2StringTC FROM ICINGA-TC-MIB
+    I2TimeStampTC FROM ICINGA-TC-MIB
+
+    NOTIFICATION-TYPE FROM SNMPv2-SMI
+    NOTIFICATION-GROUP FROM SNMPv2-CONF
+    MODULE-COMPLIANCE FROM SNMPv2-CONF
+    OBJECT-GROUP FROM SNMPv2-CONF
+    -- TEXTUAL-CONVENTION FROM SNMPv2-TC
+    -- TimeStamp FROM SNMPv2-TC
+    ;
+
+icinga2 MODULE-IDENTITY
+    LAST-UPDATED "201610202359Z"
+    ORGANIZATION
+        "Uwe Ebel, koboldmaki"
+    CONTACT-INFO
+        "Uwe Ebel"
+    DESCRIPTION
+        "ICINGA2 MIB, see also at REVISION=LAST-UPDATED"
+    REVISION    "201610202359Z"
+    DESCRIPTION
+        "WIP, add base attributs."
+    REVISION    "201512250001Z"
+    DESCRIPTION
+        "initial version"
+
+    --  1.3.6.1.4.1.12483.999.2
+    --  enterprises.KOBOLDMAKI-ROOT-MIB.OSS
+    --
+    -- snmptranslate -On ICINGA-ICINGA2-MIB::icinga2
+    -- gives the .1.3.6.1.4.1.12483.999.2.2
+    --
+    -- ::= { koboldmaki-oss 2 }
+    ::= { icinga 2 }
+
+---
+--- Defines all attributnames
+---
+
+i2ObjectAttributes OBJECT-IDENTITY
+            STATUS current
+            DESCRIPTION "All object attributs."
+            ::= { icinga2 1 }
+
+--
+-- Defines Notification
+--
+
+icinga2Notifications OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "Parent of all notifications like traps, informations etc."
+    ::= { icinga2 0 }
+
+--
+-- Everthing that is a group
+--
+icinga2Groups OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "Groups"
+    ::= { icinga2 5 }
+
+--
+-- Everything for conformance
+--
+icinga2Conformance OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "Conformance"
+    ::= { icinga2 6 }
+
+--
+-- Everything for compliance
+--
+icinga2Compliance OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "Compliance"
+    ::= { icinga2 7 }
+
+--
+-- Gives an entry via OID and required to define for compliance
+--
+i2ComplianceOidEntryGroup OBJECT-GROUP
+    OBJECTS {
+        i2DaemonStatus,
+        i2ClusterStatus
+	}
+    STATUS current
+    DESCRIPTION
+        "Entry Objects"
+    ::= { icinga2Compliance 8 }
+
+--
+-- Status entry point
+--
+icinga2Status OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION
+	"Status entry point"
+    ::= { icinga2 8 }
+
+--
+-- Generic variables
+--
+i2GenericAttribute OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "Global object attributs."
+    ::= { i2ObjectAttributes 0 }
+
+--
+-- Represent a name
+--
+i2Name OBJECT-TYPE
+    SYNTAX      I2NameTC
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "Name of a service,host, etc."
+    ::= { i2GenericAttribute 3 }
+
+--
+-- Display of a name
+--
+i2DisplayName OBJECT-TYPE
+    SYNTAX      I2DisplayNameTC
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "Display name"
+    ::= { i2GenericAttribute 5 }
+
+--
+-- Note
+--
+i2Notes OBJECT-TYPE
+    SYNTAX      I2StringTC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Notes in an Object"
+    ::= { i2GenericAttribute 6 }
+
+--
+-- URL for a note
+--
+i2NotesUrl OBJECT-TYPE
+    SYNTAX      I2StringTC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "URL to a notes"
+    ::= { i2GenericAttribute 7 }
+
+i2Output OBJECT-TYPE
+    SYNTAX      I2StringTC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "An output from a check"
+    ::= { i2GenericAttribute 8 }
+
+i2CheckCommand OBJECT-TYPE
+    SYNTAX I2CheckCommandTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Check command name"
+    ::= { i2GenericAttribute 9 }
+
+i2CheckAttempt OBJECT-TYPE
+    SYNTAX I2AttemptTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Check heck timestamp"
+    ::= { i2GenericAttribute 10 }
+
+i2CheckInterval OBJECT-TYPE
+    SYNTAX I2CheckIntervalTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Check interval"
+    ::= { i2GenericAttribute 100 }
+
+i2CheckPeriod OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Name of the period."
+    ::= { i2GenericAttribute 101 }
+
+
+i2EnableActiveChecks  OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Enable active checks?"
+    ::= { i2GenericAttribute 11 }
+
+i2EnableEventHandler  OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Is event handler enabled?"
+    ::= { i2GenericAttribute 12 }
+
+i2EnableFlapping  OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Is flapping detection enabled?"
+    ::= { i2GenericAttribute 13 }
+
+i2EnableNotfications  OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Is notification enabled?"
+    ::= { i2GenericAttribute 14 }
+
+i2EnablePassiveCheck  OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Are passive checks allowed?"
+    ::= { i2GenericAttribute 15 }
+
+i2EnablePerfdata  OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+        "Is writing of perfdata active?"
+    ::= { i2GenericAttribute 16 }
+
+i2Active OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Is active? Used e.g. zone, endpoint"
+    ::= { i2GenericAttribute 17 }
+
+i2Global OBJECT-TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+    "Is global? Used e.g. zone, endpoint"
+    ::= { i2GenericAttribute 18 }
+
+i2Address OBJECT-TYPE
+    SYNTAX I2AddressTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+    "Address in that resolves to an IPv4"
+    ::= { i2GenericAttribute 19 }
+
+i2Address6 OBJECT-TYPE
+    SYNTAX I2Address6TC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Address in that resolves to an IPv6"
+    ::= { i2GenericAttribute 20 }
+
+i2Parent OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Name of the parent"
+    ::= { i2GenericAttribute 21 }
+
+i2HaMode OBJECT-TYPE
+    -- TODO TYPE
+    SYNTAX I2BooleanTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Ha Mode"
+    ::= { i2GenericAttribute 22 }
+
+i2LastCheck OBJECT-TYPE
+    SYNTAX I2TimeStampTC
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Last check timestamp"
+    ::= { i2GenericAttribute 99 }
+
+
+
+i2HostAttributes OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "Host attributs"
+    ::= { i2ObjectAttributes 1 }
+
+i2HostName OBJECT-TYPE
+    SYNTAX I2HostNameTC
+    MAX-ACCESS read-write
+           STATUS current
+           DESCRIPTION "Hostname"
+           ::= { i2HostAttributes 1 }
+
+--
+-- Define the the attribute in the service
+--
+i2ServiceAttributes OBJECT-IDENTITY
+            STATUS current
+            DESCRIPTION "Service attributs"
+            ::= { i2ObjectAttributes 2 }
+
+i2ServiceName OBJECT-TYPE
+	    SYNTAX I2StringTC
+	    MAX-ACCESS read-write
+	    STATUS current
+	    DESCRIPTION "Name of the service"
+	    ::= { i2ServiceAttributes 1 }
+
+--
+-- This is the user info, used as contact
+--
+i2UserAttributes OBJECT-IDENTITY
+            STATUS current
+            DESCRIPTION "Contact"
+            ::= { i2ObjectAttributes 10 }
+
+i2UserPager	OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION "Pager"
+    ::= { i2UserAttributes 1 }
+
+--
+-- This is attributes for the endpoint
+--
+
+i2EndpointAttributes OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION
+	"Endpoint attributes"
+    ::= { i2ObjectAttributes 13 }
+
+i2EndpointName OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+	"Endpoint name"
+    ::= { i2EndpointAttributes 1 }
+
+--
+-- This is for the zone
+--
+i2ZoneAttributes OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION
+	"Zone attributes"
+    ::= { i2ObjectAttributes 14 }
+
+i2ZoneName OBJECT-TYPE
+    SYNTAX I2StringTC
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION "Zone name"
+    ::= { i2ZoneAttributes 1 }
+
+i2ObjectType OBJECT-TYPE
+            SYNTAX INTEGER {
+	    object (0), -- generic object, should be used
+            host (1),
+            service (2),
+            hostgroup (3),
+            servicegroup (4),
+            hostescalation (5),
+            serviceescalation (6),
+            hostdependency (7),
+            servicedependency (8),
+            timeperiod (9),
+            contact (10), -- User
+            contactgroup (11),
+            command (12),
+            endpoint (13),
+            zone (14)
+            }
+            --   MAX-ACCESS read-only
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION "Objecttype, id mapping type"
+            -- https://github.com/Icinga/icinga2/blob/master/lib/db_ido/dbobject.hpp
+            ::= { i2GenericAttribute 1 }
+
+i2StateType OBJECT-TYPE
+            SYNTAX INTEGER {
+                   stateTypeSoft (0),
+                   stateTypeHard (1)
+            }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION "State type, could be soft or hard."
+            -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/checkresult.ti
+            ::= { i2GenericAttribute 4 }
+
+i2StateHost OBJECT-TYPE
+             SYNTAX INTEGER {
+                    hostUp (0),
+                    hostDown (1)
+                    }
+             MAX-ACCESS read-only
+             STATUS current
+             DESCRIPTION "Host state"
+             -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
+             ::= { i2HostAttributes 4 }
+
+i2StateService OBJECT-TYPE
+             SYNTAX INTEGER {
+                   serviceOK (0),
+                   serviceWarning (1),
+                   serviceCritical (2),
+                   serviceUnknown (3)
+                   -- servicePending (4)
+            }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION "Service state"
+            -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
+            ::= { i2ServiceAttributes 2 }
+
+i2NotificationType OBJECT-TYPE
+           SYNTAX INTEGER {
+	   	  undefined(0), -- if not given
+                  downtimeStart(1), -- 1
+                  downtimeEnd(2), -- 2
+                  downtimeRemoved(3), -- 4
+                  custom(4), -- 8
+                  acknowledgement(5), -- 16
+                  problem(6), --  32
+                  recovery(7), -- 64
+                  flappingStart(8), -- 128
+                  flappingEnd(9) -- 256
+           }
+           MAX-ACCESS read-write
+           STATUS current
+           DESCRIPTION "Notfication type"
+           -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
+           ::= { i2ObjectAttributes 6 }
+
+
+--
+-- Status for daemon
+--
+
+i2DaemonStatus OBJECT-TYPE
+    SYNTAX INTEGER { up(0), down(1) }
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Status of the icinga2 daemon. Indicates if the daemon is up or down."
+    ::= { icinga2Status 1 }
+
+i2ClusterStatus OBJECT-TYPE
+    SYNTAX INTEGER { up(0), down(1), nocluster(2) }
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Status of the cluster"
+    ::= { icinga2Status 2 }
+
+
+--
+-- Define a generic trap
+--
+i2NotificationGeneric NOTIFICATION-TYPE
+      OBJECTS {
+      i2NotificationType,
+      i2ObjectType,
+      i2Name
+      }
+      STATUS current
+      DESCRIPTION "Generic Icinga2 Notfication"
+      REFERENCE "TODO"
+      --#TYPE "GENERICTRAP"
+      --#SUMMARY "Object %s, reason %s"
+      --#ARGUMENTS
+      ::= { icinga2Notifications 9999 }
+
+--
+-- Hosttrap
+-- .1 HostName
+-- .2 HostDisplay
+-- .3 HostAdress
+-- .4 HostState
+-- .5 NotifyDatetime
+-- .6 HostOutput
+i2NotificationHost NOTIFICATION-TYPE
+           OBJECTS {
+	   i2NotificationType,
+           i2ObjectType,
+	   i2StateHost,
+	   i2HostName,
+	   i2DisplayName
+           }
+           STATUS current
+           DESCRIPTION "Host trap"
+	   REFERENCE	"TODO"
+           --#TYPE         "HOSTTRAP"
+           --#SUMMARY      "Host %s is in state %s"
+           --#ARGUMENTS
+           ::= { icinga2Notifications 1 }
+
+i2NotificationService NOTIFICATION-TYPE
+    OBJECTS {
+        i2NotificationType,
+	i2ObjectType,
+	i2StateService,
+	i2ServiceName,
+	i2DisplayName,
+	i2HostName
+        }
+    STATUS current
+    DESCRIPTION "Service trap"
+    REFERENCE	"TODO"
+    --#TYPE     "SERVICETRAP"
+    --#SUMMARY  "Service %s is in state %s"
+    --#ARGUMENTS
+    ::= { icinga2Notifications 2 }
+
+
+i2NotificationEndpoint NOTIFICATION-TYPE
+    OBJECTS {
+        i2NotificationType,
+        i2ObjectType,
+	i2EndpointName
+	}
+    STATUS current
+    DESCRIPTION "Endpoint Trap"
+    REFERENCE	"TODO"
+    --#TYPE "ENDPOINTTRAP"
+    --#SUMMARY "Endpoint %s is in state %s"
+    ::= { icinga2Notifications 13 }
+
+i2ComplianceTypeGroup OBJECT-GROUP
+           OBJECTS {
+           i2ObjectType,
+           i2StateType,
+	   i2NotificationType
+           }
+           STATUS current
+           DESCRIPTION "Group of object for compliance"
+           ::= { icinga2Compliance 2 }
+
+i2ComplianceAttributeGroup OBJECT-GROUP
+    OBJECTS {
+    i2Name,
+    i2DisplayName,
+    i2Address,
+    i2Address6,
+    i2HostName,
+    i2UserPager,
+    i2ServiceName,
+    i2LastCheck,
+    i2CheckAttempt,
+    i2CheckInterval,
+    i2CheckPeriod,
+    i2CheckCommand,
+    i2Output,
+    i2Notes,
+    i2NotesUrl,
+    i2EnableActiveChecks,
+    i2EnableEventHandler,
+    i2EnableFlapping,
+    i2EnableNotfications,
+    i2EnablePassiveCheck,
+    i2EnablePerfdata,
+    i2Active,
+    i2Global,
+    i2Parent,
+    i2EndpointName,
+    i2ZoneName,
+    i2HaMode
+    }
+    STATUS current
+    DESCRIPTION "Variable of objects"
+    ::= { icinga2Compliance 3 }
+
+i2ComplianceStateGroup  OBJECT-GROUP
+           OBJECTS {
+           i2StateService,
+           i2StateHost
+           }
+           STATUS current
+           DESCRIPTION "Group with state objects for compliance"
+           ::= { icinga2Compliance 4 }
+
+i2ComplinanceObjectGroup OBJECT-GROUP
+    OBJECTS {
+    i2StateHost
+    }
+    STATUS current
+    DESCRIPTION "Objects like, Host, Service"
+    ::= { icinga2Compliance 5 }
+
+--
+-- Here we collect the posible notfications for compliance reason
+--
+i2ComplianceNotificationGroup NOTIFICATION-GROUP
+           NOTIFICATIONS {
+	   i2NotificationGeneric,
+           i2NotificationHost,
+           i2NotificationService,
+	   i2NotificationEndpoint
+           }
+           STATUS current
+           DESCRIPTION "All traps group for compliance."
+           ::= { icinga2Compliance 6 }
+
+--
+-- Define a Host entry
+--
+
+I2HostEntry ::= SEQUENCE {
+    i2HostName I2HostNameTC,
+    i2DisplayName I2DisplayNameTC,
+    i2Address I2AddressTC,
+    i2Address6 I2Address6TC,
+    i2Notes I2StringTC
+--    i2MaxCheckAttempts I2MaxCheckAttempts
+}
+
+--
+-- This is an Endpoint entry
+--
+I2EndpointEntry ::= SEQUENCE {
+    i2EndpointName I2StringTC,
+    i2Global I2BooleanTC,
+    i2DisplayName I2DisplayNameTC
+--    i2ZoneName	I2StringTC,
+--    i2HaMode	I2HaModeTC
+}
+
+I2ZoneEntry ::= SEQUENCE {
+    i2ZoneName I2StringTC,
+--    i2Active I2BooleanTC,
+    i2Parent I2StringTC,
+    i2Global I2BooleanTC
+}
+
+--
+-- Compliance, contains the  groups
+--
+i2Compliance MODULE-COMPLIANCE
+             STATUS current
+             DESCRIPTION "Module desciption"
+             MODULE
+
+             GROUP i2ComplianceTypeGroup
+             DESCRIPTION "Types"
+
+             GROUP i2ComplianceStateGroup
+             DESCRIPTION "States"
+
+	     GROUP i2ComplianceAttributeGroup
+	     DESCRIPTION "Attribute"
+
+	     GROUP i2ComplianceOidEntryGroup
+	     DESCRIPTION "OID entry"
+
+	     GROUP i2ComplinanceObjectGroup
+	     DESCRIPTION "Objects"
+
+             GROUP i2ComplianceNotificationGroup
+             DESCRIPTION "Traps"
+
+             ::= { icinga2Compliance 1 }
+END
+

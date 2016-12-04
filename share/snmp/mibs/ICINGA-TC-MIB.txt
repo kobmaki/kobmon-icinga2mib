@@ -1,0 +1,162 @@
+--
+-- Author: Uwe Ebel ( kobmaki @ aol . com )
+-- Infos: Definition of the ICINGA-TC-MIB below the ICINGA-ROOT-MIB, actual below koboldmaki root mib (1.3.6.1.4.1.12483)
+--
+
+ICINGA-TC-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    -- 1.3.6.1.4.1.12483.999 defines the
+    --    koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB
+    MODULE-IDENTITY FROM SNMPv2-SMI
+--    OBJECT-IDENTITY FROM SNMPv2-SMI
+--    OBJECT-TYPE FROM SNMPv2-SMI
+    Integer32 FROM SNMPv2-SMI
+    icinga FROM ICINGA-ROOT-MIB
+--    MODULE-COMPLIANCE FROM SNMPv2-CONF
+--    OBJECT-GROUP FROM SNMPv2-CONF
+    TEXTUAL-CONVENTION FROM SNMPv2-TC
+    ;
+
+icinga-tc MODULE-IDENTITY
+    LAST-UPDATED "201612032359Z"
+    ORGANIZATION
+        "Uwe Ebel, koboldmaki"
+    CONTACT-INFO
+        "Uwe Ebel"
+    DESCRIPTION
+        "ICINGA2 MIB, see also at REVISION=LAST-UPDATED"
+
+    REVISION    "201612032359Z"
+    DESCRIPTION
+        "WIP, TC."
+
+    --  1.3.6.1.4.1.12483.999.2
+    --  enterprises.KOBOLDMAKI-ROOT-MIB.OSS
+    --
+    -- snmptranslate -On ICINGA2-MIB::icinga2
+    -- gives the .1.3.6.1.4.1.12483.999.2.1.999
+    --
+    -- ::= { koboldmaki-oss 2 }
+    ::= { icinga 999 }
+
+
+--
+-- Some textucal convention (TC)
+--
+I2BooleanTC ::= TEXTUAL-CONVENTION
+    STATUS      current
+    DESCRIPTION
+        "Represent a false/true value."
+    REFERENCE "TODO"
+    SYNTAX      INTEGER { false(0), true(1) }
+
+I2StringTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "127a"
+    STATUS      current
+    DESCRIPTION
+        "Respresent a string."
+    REFERENCE "TODO"
+    SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2TimeStampTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "30a"
+    STATUS      current
+    DESCRIPTION
+        "Represent a unix timestamp"
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/base/datetime.ti"
+    SYNTAX      OCTET STRING
+
+I2NameTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "127a"
+    STATUS      current
+    DESCRIPTION
+        "Something that is a name"
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/base/configobject.ti"
+    SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2DisplayNameTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "127a"
+    STATUS      current
+    DESCRIPTION
+        "Something that is the display name"
+    REFERENCE "TODO"
+    SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2HaModeTC ::= TEXTUAL-CONVENTION
+--    DISPLAY-HINT ""
+    STATUS current
+    DESCRIPTION
+	"What HA Mode is used."
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/base/configobject.ti"
+    SYNTAX INTEGER {
+    	haRunOnce(0),
+	haRunEverywhere(1)
+	}
+
+I2HostNameTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "127a"
+    STATUS      current
+    DESCRIPTION
+        "Something that is the hostname (host_name)"
+    REFERENCE "https://github.com/Icinga/icinga2/blob/master/lib/icinga/host.ti"
+    SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2AddressTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "127a"
+    STATUS      current
+    DESCRIPTION
+        "Something that is the address of a host."
+    REFERENCE "TODO"
+    SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2Address6TC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "127a"
+    STATUS      current
+    DESCRIPTION
+        "Something that is the address (address6) of a host."
+    REFERENCE "TODO"
+    SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2CheckCommandTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "127a"
+    STATUS      current
+    DESCRIPTION
+        "Something that is check command name (check_command)."
+    REFERENCE "TODO"
+    SYNTAX      OCTET STRING (SIZE(0..127))
+
+I2CheckIntervalTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d"
+    STATUS      current
+    DESCRIPTION
+        "Check interval in seconds"
+    REFERENCE "TODO"
+    SYNTAX      Integer32 (0..999999)
+
+I2CheckTimeoutTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d"
+    STATUS      current
+    DESCRIPTION
+        "Check timeout in seconds"
+    REFERENCE "TODO"
+    SYNTAX      Integer32 (0..1024)
+
+I2AttemptTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d"
+    STATUS      current
+    DESCRIPTION
+        "Attempts, used in check, max attempt"
+    REFERENCE "TODO"
+    SYNTAX      Integer32 (0..1024)
+
+
+
+-- i2IcingaTCMIB OBJECT-IDENTITY
+--            STATUS current
+--            DESCRIPTION "All object attributs."
+--            ::= { icinga-tc 1 }
+
+
+END
+
