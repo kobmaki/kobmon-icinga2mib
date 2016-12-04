@@ -8,11 +8,13 @@ ICINGA2-MIB DEFINITIONS ::= BEGIN
 IMPORTS
     -- 1.3.6.1.4.1.12483.999 defines the
     --    koboldmaki-oss FROM KOBOLDMAKI-ROOT-MIB
+
     MODULE-IDENTITY FROM SNMPv2-SMI
     OBJECT-IDENTITY FROM SNMPv2-SMI
     OBJECT-TYPE FROM SNMPv2-SMI
     Integer32 FROM SNMPv2-SMI
-    enterprises FROM SNMPv2-SMI
+--    enterprises FROM SNMPv2-SMI
+    icinga FROM ICINGA-ROOT-MIB
     NOTIFICATION-TYPE FROM SNMPv2-SMI
     NOTIFICATION-GROUP FROM SNMPv2-CONF
     MODULE-COMPLIANCE FROM SNMPv2-CONF
@@ -42,7 +44,7 @@ icinga2 MODULE-IDENTITY
     -- gives the .1.3.6.1.4.1.12483.999.2
     --
     -- ::= { koboldmaki-oss 2 }
-    ::= { enterprises 12483 999 2 }
+    ::= { icinga 2 }
 
 
 --
@@ -199,6 +201,27 @@ icinga2Compliance OBJECT-IDENTITY
     DESCRIPTION
         "Compliance"
     ::= { icinga2 7 }
+
+
+
+i2ComplianceOidEntryGroup OBJECT-GROUP
+    OBJECTS {
+        i2DaemonStatus,
+        i2ClusterStatus
+	}
+    STATUS current
+    DESCRIPTION
+        "Entry Objects"
+    ::= { icinga2Compliance 8 }
+
+--
+-- Status entry point
+--
+icinga2Status OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION
+	"Status entry point"
+    ::= { icinga2 8 }
 
 --
 -- Generic variables
@@ -558,6 +581,31 @@ i2NotificationType OBJECT-TYPE
            -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
            ::= { i2ObjectAttributes 6 }
 
+
+--
+-- Status for daemon
+--
+
+i2DaemonStatus OBJECT-TYPE
+    SYNTAX INTEGER { up(0), down(1) }
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Status of the icinga2 daemon. Indicates if the daemon is up or down."
+    ::= { icinga2Status 1 }
+
+i2ClusterStatus OBJECT-TYPE
+    SYNTAX INTEGER { up(0), down(1), nocluster(2) }
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION
+	"Status of the cluster"
+    ::= { icinga2Status 2 }
+
+
+--
+-- Define a generic trap
+--
 i2NotificationGeneric NOTIFICATION-TYPE
       OBJECTS {
       i2NotificationType,
@@ -691,7 +739,8 @@ i2ComplianceNotificationGroup NOTIFICATION-GROUP
            NOTIFICATIONS {
 	   i2NotificationGeneric,
            i2NotificationHost,
-           i2NotificationService
+           i2NotificationService,
+	   i2NotificationEndpoint
            }
            STATUS current
            DESCRIPTION "All traps group for compliance."
@@ -715,7 +764,8 @@ I2HostEntry ::= SEQUENCE {
 --
 I2EndpointEntry ::= SEQUENCE {
     i2EndpointName I2StringTC,
-    i2Global I2BooleanTC
+    i2Global I2BooleanTC,
+    i2DisplayName I2DisplayNameTC
 --    i2ZoneName	I2StringTC,
 --    i2HaMode	I2HaModeTC
 }
@@ -743,6 +793,9 @@ i2Compliance MODULE-COMPLIANCE
 
 	     GROUP i2ComplianceAttributeGroup
 	     DESCRIPTION "Attribute"
+
+	     GROUP i2ComplianceOidEntryGroup
+	     DESCRIPTION "OID entry"
 
 	     GROUP i2ComplinanceObjectGroup
 	     DESCRIPTION "Objects"
