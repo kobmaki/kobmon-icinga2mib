@@ -1,0 +1,28 @@
+--
+-- Author: Uwe Ebel kobmaki @ aol . com )
+-- Info: Definition the ICINGA-ROOT-MIB below the koboldmaki root mib (1.3.6.1.4.1.12483)
+--
+
+ICINGA-ROOT-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY FROM SNMPv2-SMI
+    enterprises FROM SNMPv2-SMI
+    ;
+
+icinga MODULE-IDENTITY
+    LAST-UPDATED "201612032359Z"
+    ORGANIZATION
+    	"Uwe Ebel, koboldmaki"
+    CONTACT-INFO
+    	"Uwe Ebel, kobmaki @ aol . com "
+    DESCRIPTION
+        "ICINGA ROOT MIB, see also at REVISION=LAST-UPDATED.
+	 This is the MIB entry for icinga."
+
+    REVISION "201612032359Z"
+    DESCRIPTION "Initial version"
+
+::= { enterprises 12483 999 2 }
+
+END
