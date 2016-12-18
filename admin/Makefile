@@ -41,8 +41,8 @@ smidump-create:
 	@@smidump -f corba ../share/snmp/mibs/ICINGA-ICINGA2-MIB.txt > ../htdocs/ICINGA-ICINGA2-MIB.corba.txt
 #	@@smidump -f identifiers ../share/snmp/mibs/ICINGA-ICINGA2-MIB.txt > ../htdocs/ICINGA-ICINGA2-MIB.identifiers.txt
 	@./smidump-create-formats.sh
-	@mv ICINGA_ICINGA2_MIB.idl ../htdocs/ICINGA2_MIB.idl.corba.txt
-	@mv ICINGA_ICINGA2_MIB.oid ../htdocs/ICINGA2_MIB.oid.corba.txt
+	@mv ICINGA_ICINGA2_MIB.idl ../htdocs/ICINGA_ICINGA2_MIB.idl.corba.txt
+	@mv ICINGA_ICINGA2_MIB.oid ../htdocs/ICINGA_ICINGA2_MIB.oid.corba.txt
 	@mv *.c ../htdocs/
 	@mv *.h ../htdocs/
 	@echo "End smidump-create"
