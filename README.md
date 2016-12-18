@@ -4,8 +4,9 @@
 
 kobmon-icinga2mib contains an snmp-mib for Icinga2. 
 
-The project is maintained by Uwe Ebel (kobmaki) on [https://github.com/kobmaki/kobmon-icinga2mib/](github).
+The project is maintained by Uwe Ebel (kobmaki) on [github](https://github.com/kobmaki/kobmon-icinga2mib/).
 
+It is not ready for production, don't use it.
 
 ## Documentation
 
@@ -14,10 +15,10 @@ You found the documention under [doc/](doc/) and start with page [documentation]
 ## What is inside the directories?
 * [doc/](doc/) - contains documentation in markdown format
 * bin - everything to execute, like scripts, helper
-* conf - configuration files
-* admin - administration helper
-* htdocs - html files, mainly mib convert for different programs
-* share - mib file for icinga2
+* [etc/](etc/) - configuration files
+* admin - administration helper for develop
+* [htdocs/](htdocs/) - html files, MIB convert for different programs with the help of smidump
+* [share/](share/) - mib files for icinga2. The [ICINGA-ICINGA2-MIB](share/snmp/mibs/ICINGA-ICINGA2-MIB.txt) that is below the [ICINGA-ROOT-MIB](share/snmp/mibs/ICINGA-ROOT-MIB.txt). Textual convention is defined in [ICINGA-TC-MIB](share/snmp/mibs/ICINGA-TC-MIB.txt).
 
 ## Contact
 For contact info look at page [contact](https://github.com/kobmaki/).
