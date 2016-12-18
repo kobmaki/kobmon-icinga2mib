@@ -120,7 +120,7 @@ i2CheckAttempt OBJECT-TYPE
     SYNTAX      I2AttemptTC
     STATUS      current
     DESCRIPTION 
-        "Check heck timestamp"
+        "Check attempts"
     ::= { i2GenericAttribute 10 }
 
 i2EnableActiveChecks OBJECT-TYPE
@@ -242,10 +242,11 @@ i2HostName OBJECT-TYPE
     ::= { i2HostAttributes 1 }
 
 i2StateHost OBJECT-TYPE
-    SYNTAX      INTEGER { hostUp(0), hostDown(1) }
+    SYNTAX      INTEGER { hostUp(0), hostDown(1), hostUnreachable(2), 
+                    hostPending(3) }
     STATUS      current
     DESCRIPTION 
-        "Host state"
+        "Host state, up/down. The additional state unreachable/pending was grab from icingaweb2, modules/monitoring/application/controllers/HealthController.php"
     ::= { i2HostAttributes 4 }
 
 i2ServiceAttributes OBJECT-IDENTITY

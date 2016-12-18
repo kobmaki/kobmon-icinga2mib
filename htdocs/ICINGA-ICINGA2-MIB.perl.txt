@@ -146,7 +146,7 @@
                     "zone" => "14",
                 },
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2ObjectType
         {
             "name" => "i2Name",
@@ -159,7 +159,7 @@
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2NameTC"},
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2Name
         {
             "name" => "i2StateType",
@@ -177,7 +177,7 @@
                     "stateTypeHard" => "1",
                 },
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2StateType
         {
             "name" => "i2DisplayName",
@@ -190,7 +190,7 @@
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2DisplayNameTC"},
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2DisplayName
         {
             "name" => "i2Notes",
@@ -251,7 +251,7 @@
             "oid" => "1.3.6.1.4.1.12483.999.2.2.1.0.10",
             "status" => "current",
             "description" =>
-                'Check heck timestamp',
+                'Check attempts',
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2AttemptTC"},
             },
@@ -472,7 +472,7 @@
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2HostNameTC"},
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2HostName
         {
             "name" => "i2StateHost",
@@ -481,13 +481,15 @@
             "oid" => "1.3.6.1.4.1.12483.999.2.2.1.1.4",
             "status" => "current",
             "description" =>
-                'Host state',
+                'Host state, up/down. The additional state unreachable/pending was grab from icingaweb2, modules/monitoring/application/controllers/HealthController.php',
             "syntax" => {
                 "type" => 
                 {
                     "basetype" => "Enumeration",
                     "hostUp" => "0",
                     "hostDown" => "1",
+                    "hostUnreachable" => "2",
+                    "hostPending" => "3",
                 },
             },
             "access" => "readonly",
@@ -512,7 +514,7 @@
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2StringTC"},
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2ServiceName
         {
             "name" => "i2StateService",
@@ -532,7 +534,7 @@
                     "serviceUnknown" => "3",
                 },
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2StateService
         {
             "name" => "i2NotificationType",
@@ -558,7 +560,7 @@
                     "flappingEnd" => "9",
                 },
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2NotificationType
         {
             "name" => "i2UserAttributes",
@@ -580,7 +582,7 @@
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2StringTC"},
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2UserPager
         {
             "name" => "i2EndpointAttributes",
@@ -602,7 +604,7 @@
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2StringTC"},
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2EndpointName
         {
             "name" => "i2ZoneAttributes",
@@ -624,7 +626,7 @@
             "syntax" => {
                 "type" => { "module" => "ICINGA-TC-MIB", "name" => "I2StringTC"},
             },
-            "access" => "readwrite",
+            "access" => "readonly",
         }, # i2ZoneName
         {
             "name" => "icinga2Groups",
@@ -713,11 +715,11 @@
             "reference>" =>
                 'TODO',
             "objects" => [
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2NotificationType" },
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2ObjectType" },
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2StateHost" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2HostName" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2DisplayName" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2StateHost" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2Output" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2EndpointName" },
             ],
         }, # i2NotificationHost
         {
@@ -731,11 +733,11 @@
             "reference>" =>
                 'TODO',
             "objects" => [
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2NotificationType" },
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2ObjectType" },
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2StateService" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2ServiceName" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2DisplayName" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2StateService" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2Output" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2EndpointName" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2HostName" },
             ],
         }, # i2NotificationService
@@ -750,9 +752,8 @@
             "reference>" =>
                 'TODO',
             "objects" => [
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2NotificationType" },
-                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2ObjectType" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2EndpointName" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2DisplayName" },
             ],
         }, # i2NotificationEndpoint
         {
@@ -762,13 +763,16 @@
             "oid" => "1.3.6.1.4.1.12483.999.2.2.0.9999",
             "status" => "current",
             "description" =>
-                'Generic Icinga2 Notfication',
+                'Generic Icinga2 Notfication %s (%s), for %s (%s)',
             "reference>" =>
                 'TODO',
             "objects" => [
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2NotificationType" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2ObjectType" },
                 { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2Name" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2DisplayName" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2Output" },
+                { "module" => "ICINGA-ICINGA2-MIB", "name" => "i2EndpointName" },
             ],
         }, # i2NotificationGeneric
     ], # notifications

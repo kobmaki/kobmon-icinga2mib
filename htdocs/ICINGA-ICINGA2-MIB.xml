@@ -88,7 +88,7 @@
           <namednumber name="zone" number="14"/>
         </typedef>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Objecttype, id mapping type
       </description>
@@ -97,7 +97,7 @@
       <syntax>
         <type module="ICINGA-TC-MIB" name="I2NameTC"/>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Name of a service,host, etc.
       </description>
@@ -109,7 +109,7 @@
           <namednumber name="stateTypeHard" number="1"/>
         </typedef>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           State type, could be soft or hard.
       </description>
@@ -118,7 +118,7 @@
       <syntax>
         <type module="ICINGA-TC-MIB" name="I2DisplayNameTC"/>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Display name
       </description>
@@ -165,7 +165,7 @@
       </syntax>
       <access>readonly</access>
       <description>
-          Check heck timestamp
+          Check attempts
       </description>
     </scalar>
     <scalar name="i2EnableActiveChecks" oid="1.3.6.1.4.1.12483.999.2.2.1.0.11" status="current">
@@ -312,7 +312,7 @@
       <syntax>
         <type module="ICINGA-TC-MIB" name="I2HostNameTC"/>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Hostname
       </description>
@@ -322,11 +322,13 @@
         <typedef basetype="Enumeration">
           <namednumber name="hostUp" number="0"/>
           <namednumber name="hostDown" number="1"/>
+          <namednumber name="hostUnreachable" number="2"/>
+          <namednumber name="hostPending" number="3"/>
         </typedef>
       </syntax>
       <access>readonly</access>
       <description>
-          Host state
+          Host state, up/down. The additional state unreachable/pending was grab from icingaweb2, modules/monitoring/application/controllers/HealthController.php
       </description>
     </scalar>
     <node name="i2ServiceAttributes" oid="1.3.6.1.4.1.12483.999.2.2.1.2" status="current">
@@ -338,7 +340,7 @@
       <syntax>
         <type module="ICINGA-TC-MIB" name="I2StringTC"/>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Name of the service
       </description>
@@ -352,7 +354,7 @@
           <namednumber name="serviceUnknown" number="3"/>
         </typedef>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Service state
       </description>
@@ -372,7 +374,7 @@
           <namednumber name="flappingEnd" number="9"/>
         </typedef>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Notfication type
       </description>
@@ -386,7 +388,7 @@
       <syntax>
         <type module="ICINGA-TC-MIB" name="I2StringTC"/>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Pager
       </description>
@@ -400,7 +402,7 @@
       <syntax>
         <type module="ICINGA-TC-MIB" name="I2StringTC"/>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Endpoint name
       </description>
@@ -414,7 +416,7 @@
       <syntax>
         <type module="ICINGA-TC-MIB" name="I2StringTC"/>
       </syntax>
-      <access>readwrite</access>
+      <access>readonly</access>
       <description>
           Zone name
       </description>
@@ -469,11 +471,11 @@
   <notifications>
     <notification name="i2NotificationHost" oid="1.3.6.1.4.1.12483.999.2.2.0.1" status="current">
       <objects>
-        <object module="ICINGA-ICINGA2-MIB" name="i2NotificationType"/>
-        <object module="ICINGA-ICINGA2-MIB" name="i2ObjectType"/>
-        <object module="ICINGA-ICINGA2-MIB" name="i2StateHost"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2HostName"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2DisplayName"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2StateHost"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2Output"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2EndpointName"/>
       </objects>
       <description>
           Host trap
@@ -484,11 +486,11 @@
     </notification>
     <notification name="i2NotificationService" oid="1.3.6.1.4.1.12483.999.2.2.0.2" status="current">
       <objects>
-        <object module="ICINGA-ICINGA2-MIB" name="i2NotificationType"/>
-        <object module="ICINGA-ICINGA2-MIB" name="i2ObjectType"/>
-        <object module="ICINGA-ICINGA2-MIB" name="i2StateService"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2ServiceName"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2DisplayName"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2StateService"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2Output"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2EndpointName"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2HostName"/>
       </objects>
       <description>
@@ -500,9 +502,8 @@
     </notification>
     <notification name="i2NotificationEndpoint" oid="1.3.6.1.4.1.12483.999.2.2.0.13" status="current">
       <objects>
-        <object module="ICINGA-ICINGA2-MIB" name="i2NotificationType"/>
-        <object module="ICINGA-ICINGA2-MIB" name="i2ObjectType"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2EndpointName"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2DisplayName"/>
       </objects>
       <description>
           Endpoint Trap
@@ -516,9 +517,12 @@
         <object module="ICINGA-ICINGA2-MIB" name="i2NotificationType"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2ObjectType"/>
         <object module="ICINGA-ICINGA2-MIB" name="i2Name"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2DisplayName"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2Output"/>
+        <object module="ICINGA-ICINGA2-MIB" name="i2EndpointName"/>
       </objects>
       <description>
-          Generic Icinga2 Notfication
+          Generic Icinga2 Notfication %s (%s), for %s (%s)
       </description>
       <reference>
           TODO

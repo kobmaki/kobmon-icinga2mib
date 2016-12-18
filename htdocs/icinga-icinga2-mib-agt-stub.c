@@ -41,33 +41,6 @@ static unsigned char *
 read_icinga2Status_stub(struct variable *, oid *, size_t *, int, size_t *, WriteMethod **);
 
 /*
- * Forward declaration of write methods for writable objects:
- */
-
-static int
-write_i2ObjectType_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2Name_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2StateType_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2DisplayName_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2HostName_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2ServiceName_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2StateService_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2NotificationType_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2UserPager_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2EndpointName_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-static int
-write_i2ZoneName_stub(int, u_char *, u_char, int, u_char *, oid *, int);
-
-/*
  * Definitions of tags that are used internally to read/write
  * the selected object type. These tags should be unique.
  */
@@ -77,7 +50,7 @@ write_i2ZoneName_stub(int, u_char *, u_char, int, u_char *, oid *, int);
 static oid i2ObjectAttributes_base[] = {1, 3, 6, 1, 4, 1, 12483, 999, 2, 2, 1};
 
 struct variable i2ObjectAttributes_variables[] = {
-    { I2NOTIFICATIONTYPE, ASN_INTEGER, RWRITE, read_i2ObjectAttributes_stub, 1, {6} },
+    { I2NOTIFICATIONTYPE, ASN_INTEGER, RONLY, read_i2ObjectAttributes_stub, 1, {6} },
 };
 
 #define I2OBJECTTYPE                     1
@@ -108,10 +81,10 @@ struct variable i2ObjectAttributes_variables[] = {
 static oid i2GenericAttribute_base[] = {1, 3, 6, 1, 4, 1, 12483, 999, 2, 2, 1, 0};
 
 struct variable i2GenericAttribute_variables[] = {
-    { I2OBJECTTYPE, ASN_INTEGER, RWRITE, read_i2GenericAttribute_stub, 1, {1} },
-    { I2NAME, ASN_OCTET_STR, RWRITE, read_i2GenericAttribute_stub, 1, {3} },
-    { I2STATETYPE, ASN_INTEGER, RWRITE, read_i2GenericAttribute_stub, 1, {4} },
-    { I2DISPLAYNAME, ASN_OCTET_STR, RWRITE, read_i2GenericAttribute_stub, 1, {5} },
+    { I2OBJECTTYPE, ASN_INTEGER, RONLY, read_i2GenericAttribute_stub, 1, {1} },
+    { I2NAME, ASN_OCTET_STR, RONLY, read_i2GenericAttribute_stub, 1, {3} },
+    { I2STATETYPE, ASN_INTEGER, RONLY, read_i2GenericAttribute_stub, 1, {4} },
+    { I2DISPLAYNAME, ASN_OCTET_STR, RONLY, read_i2GenericAttribute_stub, 1, {5} },
     { I2NOTES, ASN_OCTET_STR, RONLY, read_i2GenericAttribute_stub, 1, {6} },
     { I2NOTESURL, ASN_OCTET_STR, RONLY, read_i2GenericAttribute_stub, 1, {7} },
     { I2OUTPUT, ASN_OCTET_STR, RONLY, read_i2GenericAttribute_stub, 1, {8} },
@@ -140,7 +113,7 @@ struct variable i2GenericAttribute_variables[] = {
 static oid i2HostAttributes_base[] = {1, 3, 6, 1, 4, 1, 12483, 999, 2, 2, 1, 1};
 
 struct variable i2HostAttributes_variables[] = {
-    { I2HOSTNAME, ASN_OCTET_STR, RWRITE, read_i2HostAttributes_stub, 1, {1} },
+    { I2HOSTNAME, ASN_OCTET_STR, RONLY, read_i2HostAttributes_stub, 1, {1} },
     { I2STATEHOST, ASN_INTEGER, RONLY, read_i2HostAttributes_stub, 1, {4} },
 };
 
@@ -150,8 +123,8 @@ struct variable i2HostAttributes_variables[] = {
 static oid i2ServiceAttributes_base[] = {1, 3, 6, 1, 4, 1, 12483, 999, 2, 2, 1, 2};
 
 struct variable i2ServiceAttributes_variables[] = {
-    { I2SERVICENAME, ASN_OCTET_STR, RWRITE, read_i2ServiceAttributes_stub, 1, {1} },
-    { I2STATESERVICE, ASN_INTEGER, RWRITE, read_i2ServiceAttributes_stub, 1, {2} },
+    { I2SERVICENAME, ASN_OCTET_STR, RONLY, read_i2ServiceAttributes_stub, 1, {1} },
+    { I2STATESERVICE, ASN_INTEGER, RONLY, read_i2ServiceAttributes_stub, 1, {2} },
 };
 
 #define I2USERPAGER                      1
@@ -159,7 +132,7 @@ struct variable i2ServiceAttributes_variables[] = {
 static oid i2UserAttributes_base[] = {1, 3, 6, 1, 4, 1, 12483, 999, 2, 2, 1, 10};
 
 struct variable i2UserAttributes_variables[] = {
-    { I2USERPAGER, ASN_OCTET_STR, RWRITE, read_i2UserAttributes_stub, 1, {1} },
+    { I2USERPAGER, ASN_OCTET_STR, RONLY, read_i2UserAttributes_stub, 1, {1} },
 };
 
 #define I2ENDPOINTNAME                   1
@@ -167,7 +140,7 @@ struct variable i2UserAttributes_variables[] = {
 static oid i2EndpointAttributes_base[] = {1, 3, 6, 1, 4, 1, 12483, 999, 2, 2, 1, 13};
 
 struct variable i2EndpointAttributes_variables[] = {
-    { I2ENDPOINTNAME, ASN_OCTET_STR, RWRITE, read_i2EndpointAttributes_stub, 1, {1} },
+    { I2ENDPOINTNAME, ASN_OCTET_STR, RONLY, read_i2EndpointAttributes_stub, 1, {1} },
 };
 
 #define I2ZONENAME                       1
@@ -175,7 +148,7 @@ struct variable i2EndpointAttributes_variables[] = {
 static oid i2ZoneAttributes_base[] = {1, 3, 6, 1, 4, 1, 12483, 999, 2, 2, 1, 14};
 
 struct variable i2ZoneAttributes_variables[] = {
-    { I2ZONENAME, ASN_OCTET_STR, RWRITE, read_i2ZoneAttributes_stub, 1, {1} },
+    { I2ZONENAME, ASN_OCTET_STR, RONLY, read_i2ZoneAttributes_stub, 1, {1} },
 };
 
 #define I2DAEMONSTATUS                   1
@@ -651,143 +624,6 @@ read_icinga2Status_stub(struct variable *vp,
     }
 
     return NULL;
-}
-
-
-/*
- * Forward declaration of write methods for writable objects:
- */
-
-static int
-write_i2ObjectType_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2Name_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2StateType_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2DisplayName_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2HostName_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2ServiceName_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2StateService_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2NotificationType_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2UserPager_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2EndpointName_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
-}
-
-static int
-write_i2ZoneName_stub(int action,
-    u_char   *var_val,
-    u_char   var_val_type,
-    int      var_val_len,
-    u_char   *statP,
-    oid      *name,
-    int      name_len)
-{
-    return SNMP_ERR_NOERROR;
 }
 
 

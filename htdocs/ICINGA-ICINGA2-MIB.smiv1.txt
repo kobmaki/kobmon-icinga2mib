@@ -52,7 +52,7 @@ i2ObjectType OBJECT-TYPE
                     servicedependency(8), timeperiod(9), contact(10), 
                     contactgroup(11), command(12), endpoint(13), 
                     zone(14) }
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Objecttype, id mapping type"
@@ -60,7 +60,7 @@ i2ObjectType OBJECT-TYPE
 
 i2Name OBJECT-TYPE
     SYNTAX      I2NameTC
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Name of a service,host, etc."
@@ -68,7 +68,7 @@ i2Name OBJECT-TYPE
 
 i2StateType OBJECT-TYPE
     SYNTAX      INTEGER { stateTypeSoft(0), stateTypeHard(1) }
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "State type, could be soft or hard."
@@ -76,7 +76,7 @@ i2StateType OBJECT-TYPE
 
 i2DisplayName OBJECT-TYPE
     SYNTAX      I2DisplayNameTC
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Display name"
@@ -119,7 +119,7 @@ i2CheckAttempt OBJECT-TYPE
     ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
-        "Check heck timestamp"
+        "Check attempts"
     ::= { i2GenericAttribute 10 }
 
 i2EnableActiveChecks OBJECT-TYPE
@@ -247,18 +247,19 @@ i2HostAttributes OBJECT IDENTIFIER
 
 i2HostName OBJECT-TYPE
     SYNTAX      I2HostNameTC
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Hostname"
     ::= { i2HostAttributes 1 }
 
 i2StateHost OBJECT-TYPE
-    SYNTAX      INTEGER { hostUp(0), hostDown(1) }
+    SYNTAX      INTEGER { hostUp(0), hostDown(1), hostUnreachable(2), 
+                    hostPending(3) }
     ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
-        "Host state"
+        "Host state, up/down. The additional state unreachable/pending was grab from icingaweb2, modules/monitoring/application/controllers/HealthController.php"
     ::= { i2HostAttributes 4 }
 
 i2ServiceAttributes OBJECT IDENTIFIER
@@ -266,7 +267,7 @@ i2ServiceAttributes OBJECT IDENTIFIER
 
 i2ServiceName OBJECT-TYPE
     SYNTAX      I2StringTC
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Name of the service"
@@ -275,7 +276,7 @@ i2ServiceName OBJECT-TYPE
 i2StateService OBJECT-TYPE
     SYNTAX      INTEGER { serviceOK(0), serviceWarning(1), 
                     serviceCritical(2), serviceUnknown(3) }
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Service state"
@@ -286,7 +287,7 @@ i2NotificationType OBJECT-TYPE
                     downtimeRemoved(3), custom(4), acknowledgement(5), 
                     problem(6), recovery(7), flappingStart(8), 
                     flappingEnd(9) }
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Notfication type"
@@ -297,7 +298,7 @@ i2UserAttributes OBJECT IDENTIFIER
 
 i2UserPager OBJECT-TYPE
     SYNTAX      I2StringTC
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Pager"
@@ -308,7 +309,7 @@ i2EndpointAttributes OBJECT IDENTIFIER
 
 i2EndpointName OBJECT-TYPE
     SYNTAX      I2StringTC
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Endpoint name"
@@ -319,7 +320,7 @@ i2ZoneAttributes OBJECT IDENTIFIER
 
 i2ZoneName OBJECT-TYPE
     SYNTAX      I2StringTC
-    ACCESS      read-write
+    ACCESS      read-only
     STATUS      mandatory
     DESCRIPTION 
         "Zone name"
@@ -355,8 +356,8 @@ i2ClusterStatus OBJECT-TYPE
 
 i2NotificationHost TRAP-TYPE
     ENTERPRISE  icinga2
-    VARIABLES   { i2NotificationType, i2ObjectType, i2StateHost, 
-                  i2HostName, i2DisplayName }
+    VARIABLES   { i2HostName, i2DisplayName, i2StateHost, i2Output, 
+                  i2EndpointName }
 --     STATUS      mandatory
     DESCRIPTION 
         "Host trap"
@@ -366,8 +367,8 @@ i2NotificationHost TRAP-TYPE
 
 i2NotificationService TRAP-TYPE
     ENTERPRISE  icinga2
-    VARIABLES   { i2NotificationType, i2ObjectType, i2StateService, 
-                  i2ServiceName, i2DisplayName, i2HostName }
+    VARIABLES   { i2ServiceName, i2DisplayName, i2StateService, i2Output, 
+                  i2EndpointName, i2HostName }
 --     STATUS      mandatory
     DESCRIPTION 
         "Service trap"
@@ -377,7 +378,7 @@ i2NotificationService TRAP-TYPE
 
 i2NotificationEndpoint TRAP-TYPE
     ENTERPRISE  icinga2
-    VARIABLES   { i2NotificationType, i2ObjectType, i2EndpointName }
+    VARIABLES   { i2EndpointName, i2DisplayName }
 --     STATUS      mandatory
     DESCRIPTION 
         "Endpoint Trap"
@@ -387,10 +388,11 @@ i2NotificationEndpoint TRAP-TYPE
 
 i2NotificationGeneric TRAP-TYPE
     ENTERPRISE  icinga2
-    VARIABLES   { i2NotificationType, i2ObjectType, i2Name }
+    VARIABLES   { i2NotificationType, i2ObjectType, i2Name, 
+                  i2DisplayName, i2Output, i2EndpointName }
 --     STATUS      mandatory
     DESCRIPTION 
-        "Generic Icinga2 Notfication"
+        "Generic Icinga2 Notfication %s (%s), for %s (%s)"
 --     REFERENCE   
 --         "TODO"
     ::= 9999

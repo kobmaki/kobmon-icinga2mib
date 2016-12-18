@@ -4,22 +4,22 @@
   |
   +--icinga2Notifications(0)
   |  |
-  |  +--i2NotificationHost(1) [i2NotificationType,i2ObjectType,i2StateHost,i2HostName,i2DisplayName]
+  |  +--i2NotificationHost(1) [i2HostName,i2DisplayName,i2StateHost,i2Output,i2EndpointName]
   |  |
-  |  +--i2NotificationService(2) [i2NotificationType,i2ObjectType,i2StateService,i2ServiceName,i2DisplayName,i2HostName]
+  |  +--i2NotificationService(2) [i2ServiceName,i2DisplayName,i2StateService,i2Output,i2EndpointName,i2HostName]
   |  |
-  |  +--i2NotificationEndpoint(13) [i2NotificationType,i2ObjectType,i2EndpointName]
+  |  +--i2NotificationEndpoint(13) [i2EndpointName,i2DisplayName]
   |  |
-  |  +--i2NotificationGeneric(9999) [i2NotificationType,i2ObjectType,i2Name]
+  |  +--i2NotificationGeneric(9999) [i2NotificationType,i2ObjectType,i2Name,i2DisplayName,i2Output,i2EndpointName]
   |
   +--i2ObjectAttributes(1)
   |  |
   |  +--i2GenericAttribute(0)
   |  |  |
-  |  |  +-- rwn Enumeration       i2ObjectType(1)
-  |  |  +-- rwn I2NameTC          i2Name(3)
-  |  |  +-- rwn Enumeration       i2StateType(4)
-  |  |  +-- rwn I2DisplayNameTC   i2DisplayName(5)
+  |  |  +-- r-n Enumeration       i2ObjectType(1)
+  |  |  +-- r-n I2NameTC          i2Name(3)
+  |  |  +-- r-n Enumeration       i2StateType(4)
+  |  |  +-- r-n I2DisplayNameTC   i2DisplayName(5)
   |  |  +-- r-n I2StringTC        i2Notes(6)
   |  |  +-- r-n I2StringTC        i2NotesUrl(7)
   |  |  +-- r-n I2StringTC        i2Output(8)
@@ -43,27 +43,27 @@
   |  |
   |  +--i2HostAttributes(1)
   |  |  |
-  |  |  +-- rwn I2HostNameTC i2HostName(1)
+  |  |  +-- r-n I2HostNameTC i2HostName(1)
   |  |  +-- r-n Enumeration  i2StateHost(4)
   |  |
   |  +--i2ServiceAttributes(2)
   |  |  |
-  |  |  +-- rwn I2StringTC  i2ServiceName(1)
-  |  |  +-- rwn Enumeration i2StateService(2)
+  |  |  +-- r-n I2StringTC  i2ServiceName(1)
+  |  |  +-- r-n Enumeration i2StateService(2)
   |  |
-  |  +-- rwn Enumeration i2NotificationType(6)
+  |  +-- r-n Enumeration i2NotificationType(6)
   |  |
   |  +--i2UserAttributes(10)
   |  |  |
-  |  |  +-- rwn I2StringTC i2UserPager(1)
+  |  |  +-- r-n I2StringTC i2UserPager(1)
   |  |
   |  +--i2EndpointAttributes(13)
   |  |  |
-  |  |  +-- rwn I2StringTC i2EndpointName(1)
+  |  |  +-- r-n I2StringTC i2EndpointName(1)
   |  |
   |  +--i2ZoneAttributes(14)
   |     |
-  |     +-- rwn I2StringTC i2ZoneName(1)
+  |     +-- r-n I2StringTC i2ZoneName(1)
   |
   +--icinga2Groups(5)
   |

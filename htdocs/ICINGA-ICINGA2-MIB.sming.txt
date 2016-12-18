@@ -77,7 +77,7 @@ module ICINGA-ICINGA2-MIB {
                       timeperiod(9), contact(10), 
                       contactgroup(11), command(12), 
                       endpoint(13), zone(14));
-    access          readwrite;
+    access          readonly;
     description     
        "Objecttype, id mapping type";
   };
@@ -85,7 +85,7 @@ module ICINGA-ICINGA2-MIB {
   scalar i2Name {
     oid             i2GenericAttribute.3;
     type            I2NameTC;
-    access          readwrite;
+    access          readonly;
     description     
        "Name of a service,host, etc.";
   };
@@ -94,7 +94,7 @@ module ICINGA-ICINGA2-MIB {
     oid             i2GenericAttribute.4;
     type            Enumeration (stateTypeSoft(0), 
                       stateTypeHard(1));
-    access          readwrite;
+    access          readonly;
     description     
        "State type, could be soft or hard.";
   };
@@ -102,7 +102,7 @@ module ICINGA-ICINGA2-MIB {
   scalar i2DisplayName {
     oid             i2GenericAttribute.5;
     type            I2DisplayNameTC;
-    access          readwrite;
+    access          readonly;
     description     
        "Display name";
   };
@@ -144,7 +144,7 @@ module ICINGA-ICINGA2-MIB {
     type            I2AttemptTC;
     access          readonly;
     description     
-       "Check heck timestamp";
+       "Check attempts";
   };
 
   scalar i2EnableActiveChecks {
@@ -276,17 +276,18 @@ module ICINGA-ICINGA2-MIB {
   scalar i2HostName {
     oid             i2HostAttributes.1;
     type            I2HostNameTC;
-    access          readwrite;
+    access          readonly;
     description     
        "Hostname";
   };
 
   scalar i2StateHost {
     oid             i2HostAttributes.4;
-    type            Enumeration (hostUp(0), hostDown(1));
+    type            Enumeration (hostUp(0), hostDown(1), 
+                      hostUnreachable(2), hostPending(3));
     access          readonly;
     description     
-       "Host state";
+       "Host state, up/down. The additional state unreachable/pending was grab from icingaweb2, modules/monitoring/application/controllers/HealthController.php";
   };
 
   node i2ServiceAttributes {
@@ -298,7 +299,7 @@ module ICINGA-ICINGA2-MIB {
   scalar i2ServiceName {
     oid             i2ServiceAttributes.1;
     type            I2StringTC;
-    access          readwrite;
+    access          readonly;
     description     
        "Name of the service";
   };
@@ -307,7 +308,7 @@ module ICINGA-ICINGA2-MIB {
     oid             i2ServiceAttributes.2;
     type            Enumeration (serviceOK(0), serviceWarning(1), 
                       serviceCritical(2), serviceUnknown(3));
-    access          readwrite;
+    access          readonly;
     description     
        "Service state";
   };
@@ -319,7 +320,7 @@ module ICINGA-ICINGA2-MIB {
                       custom(4), acknowledgement(5), problem(6), 
                       recovery(7), flappingStart(8), 
                       flappingEnd(9));
-    access          readwrite;
+    access          readonly;
     description     
        "Notfication type";
   };
@@ -333,7 +334,7 @@ module ICINGA-ICINGA2-MIB {
   scalar i2UserPager {
     oid             i2UserAttributes.1;
     type            I2StringTC;
-    access          readwrite;
+    access          readonly;
     description     
        "Pager";
   };
@@ -347,7 +348,7 @@ module ICINGA-ICINGA2-MIB {
   scalar i2EndpointName {
     oid             i2EndpointAttributes.1;
     type            I2StringTC;
-    access          readwrite;
+    access          readonly;
     description     
        "Endpoint name";
   };
@@ -361,7 +362,7 @@ module ICINGA-ICINGA2-MIB {
   scalar i2ZoneName {
     oid             i2ZoneAttributes.1;
     type            I2StringTC;
-    access          readwrite;
+    access          readonly;
     description     
        "Zone name";
   };
@@ -412,8 +413,8 @@ module ICINGA-ICINGA2-MIB {
 
   notification i2NotificationHost {
     oid             icinga2Notifications.1;
-    objects         (i2NotificationType, i2ObjectType, 
-                     i2StateHost, i2HostName, i2DisplayName);
+    objects         (i2HostName, i2DisplayName, i2StateHost, 
+                     i2Output, i2EndpointName);
     description     
        "Host trap";
     reference       
@@ -422,9 +423,9 @@ module ICINGA-ICINGA2-MIB {
 
   notification i2NotificationService {
     oid             icinga2Notifications.2;
-    objects         (i2NotificationType, i2ObjectType, 
-                     i2StateService, i2ServiceName, 
-                     i2DisplayName, i2HostName);
+    objects         (i2ServiceName, i2DisplayName, 
+                     i2StateService, i2Output, i2EndpointName, 
+                     i2HostName);
     description     
        "Service trap";
     reference       
@@ -433,8 +434,7 @@ module ICINGA-ICINGA2-MIB {
 
   notification i2NotificationEndpoint {
     oid             icinga2Notifications.13;
-    objects         (i2NotificationType, i2ObjectType, 
-                     i2EndpointName);
+    objects         (i2EndpointName, i2DisplayName);
     description     
        "Endpoint Trap";
     reference       
@@ -443,9 +443,10 @@ module ICINGA-ICINGA2-MIB {
 
   notification i2NotificationGeneric {
     oid             icinga2Notifications.9999;
-    objects         (i2NotificationType, i2ObjectType, i2Name);
+    objects         (i2NotificationType, i2ObjectType, i2Name, 
+                     i2DisplayName, i2Output, i2EndpointName);
     description     
-       "Generic Icinga2 Notfication";
+       "Generic Icinga2 Notfication %s (%s), for %s (%s)";
     reference       
        "TODO";
   };
