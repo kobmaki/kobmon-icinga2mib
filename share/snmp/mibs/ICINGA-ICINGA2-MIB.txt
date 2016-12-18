@@ -143,7 +143,7 @@ i2GenericAttribute OBJECT-IDENTITY
 --
 i2Name OBJECT-TYPE
     SYNTAX      I2NameTC
-    MAX-ACCESS  read-write
+    MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
         "Name of a service,host, etc."
@@ -154,7 +154,7 @@ i2Name OBJECT-TYPE
 --
 i2DisplayName OBJECT-TYPE
     SYNTAX      I2DisplayNameTC
-    MAX-ACCESS  read-write
+    MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
         "Display name"
@@ -203,7 +203,7 @@ i2CheckAttempt OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS current
     DESCRIPTION
-        "Check heck timestamp"
+        "Check attempts"
     ::= { i2GenericAttribute 10 }
 
 i2CheckInterval OBJECT-TYPE
@@ -338,7 +338,7 @@ i2HostAttributes OBJECT-IDENTITY
 
 i2HostName OBJECT-TYPE
     SYNTAX I2HostNameTC
-    MAX-ACCESS read-write
+    MAX-ACCESS read-only
            STATUS current
            DESCRIPTION "Hostname"
            ::= { i2HostAttributes 1 }
@@ -353,7 +353,7 @@ i2ServiceAttributes OBJECT-IDENTITY
 
 i2ServiceName OBJECT-TYPE
 	    SYNTAX I2StringTC
-	    MAX-ACCESS read-write
+	    MAX-ACCESS read-only
 	    STATUS current
 	    DESCRIPTION "Name of the service"
 	    ::= { i2ServiceAttributes 1 }
@@ -368,7 +368,7 @@ i2UserAttributes OBJECT-IDENTITY
 
 i2UserPager	OBJECT-TYPE
     SYNTAX I2StringTC
-    MAX-ACCESS read-write
+    MAX-ACCESS read-only
     STATUS current
     DESCRIPTION "Pager"
     ::= { i2UserAttributes 1 }
@@ -385,7 +385,7 @@ i2EndpointAttributes OBJECT-IDENTITY
 
 i2EndpointName OBJECT-TYPE
     SYNTAX I2StringTC
-    MAX-ACCESS read-write
+    MAX-ACCESS read-only
     STATUS current
     DESCRIPTION
 	"Endpoint name"
@@ -402,7 +402,7 @@ i2ZoneAttributes OBJECT-IDENTITY
 
 i2ZoneName OBJECT-TYPE
     SYNTAX I2StringTC
-    MAX-ACCESS read-write
+    MAX-ACCESS read-only
     STATUS current
     DESCRIPTION "Zone name"
     ::= { i2ZoneAttributes 1 }
@@ -426,7 +426,7 @@ i2ObjectType OBJECT-TYPE
             zone (14)
             }
             --   MAX-ACCESS read-only
-            MAX-ACCESS read-write
+            MAX-ACCESS read-only
             STATUS current
             DESCRIPTION "Objecttype, id mapping type"
             -- https://github.com/Icinga/icinga2/blob/master/lib/db_ido/dbobject.hpp
@@ -437,7 +437,7 @@ i2StateType OBJECT-TYPE
                    stateTypeSoft (0),
                    stateTypeHard (1)
             }
-            MAX-ACCESS read-write
+            MAX-ACCESS read-only
             STATUS current
             DESCRIPTION "State type, could be soft or hard."
             -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/checkresult.ti
@@ -446,11 +446,13 @@ i2StateType OBJECT-TYPE
 i2StateHost OBJECT-TYPE
              SYNTAX INTEGER {
                     hostUp (0),
-                    hostDown (1)
+                    hostDown (1),
+		    hostUnreachable(2),
+		    hostPending(3)
                     }
              MAX-ACCESS read-only
              STATUS current
-             DESCRIPTION "Host state"
+             DESCRIPTION "Host state, up/down. The additional state unreachable/pending was grab from icingaweb2, modules/monitoring/application/controllers/HealthController.php"
              -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
              ::= { i2HostAttributes 4 }
 
@@ -462,7 +464,7 @@ i2StateService OBJECT-TYPE
                    serviceUnknown (3)
                    -- servicePending (4)
             }
-            MAX-ACCESS read-write
+            MAX-ACCESS read-only
             STATUS current
             DESCRIPTION "Service state"
             -- https://github.com/Icinga/icinga2/tree/master/lib/icinga/checkresult.ti
@@ -481,7 +483,7 @@ i2NotificationType OBJECT-TYPE
                   flappingStart(8), -- 128
                   flappingEnd(9) -- 256
            }
-           MAX-ACCESS read-write
+           MAX-ACCESS read-only
            STATUS current
            DESCRIPTION "Notfication type"
            -- https://github.com/Icinga/icinga2/blob/master/lib/icinga/notification.hpp
@@ -516,14 +518,19 @@ i2NotificationGeneric NOTIFICATION-TYPE
       OBJECTS {
       i2NotificationType,
       i2ObjectType,
-      i2Name
+      i2Name,
+      i2DisplayName,
+      i2Output,
+      i2EndpointName
       }
       STATUS current
-      DESCRIPTION "Generic Icinga2 Notfication"
+      DESCRIPTION "Generic Icinga2 Notfication %s (%s), for %s (%s)"
       REFERENCE "TODO"
       --#TYPE "GENERICTRAP"
       --#SUMMARY "Object %s, reason %s"
-      --#ARGUMENTS
+      --#ARGUMENTS {1 2 3 4}
+      --#SEVERITY INFORMATIONAL
+      --#STATE OPERATIONAL
       ::= { icinga2Notifications 9999 }
 
 --
@@ -536,27 +543,31 @@ i2NotificationGeneric NOTIFICATION-TYPE
 -- .6 HostOutput
 i2NotificationHost NOTIFICATION-TYPE
            OBJECTS {
-	   i2NotificationType,
-           i2ObjectType,
-	   i2StateHost,
+	   -- i2NotificationType,
+           -- i2ObjectType,
 	   i2HostName,
-	   i2DisplayName
+	   i2DisplayName,
+	   i2StateHost,
+	   i2Output,
+	   i2EndpointName
            }
            STATUS current
            DESCRIPTION "Host trap"
 	   REFERENCE	"TODO"
            --#TYPE         "HOSTTRAP"
-           --#SUMMARY      "Host %s is in state %s"
-           --#ARGUMENTS
+           --#SUMMARY      "Host %s (%s) is in state %s"
+           --#ARGUMENTS {4 5 2}
            ::= { icinga2Notifications 1 }
 
 i2NotificationService NOTIFICATION-TYPE
     OBJECTS {
-        i2NotificationType,
-	i2ObjectType,
-	i2StateService,
+        -- i2NotificationType,
+	-- i2ObjectType,
 	i2ServiceName,
 	i2DisplayName,
+	i2StateService,
+	i2Output,
+	i2EndpointName,
 	i2HostName
         }
     STATUS current
@@ -570,9 +581,10 @@ i2NotificationService NOTIFICATION-TYPE
 
 i2NotificationEndpoint NOTIFICATION-TYPE
     OBJECTS {
-        i2NotificationType,
-        i2ObjectType,
-	i2EndpointName
+        -- i2NotificationType,
+        -- i2ObjectType,
+	i2EndpointName,
+	i2DisplayName
 	}
     STATUS current
     DESCRIPTION "Endpoint Trap"
